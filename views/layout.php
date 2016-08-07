@@ -34,14 +34,9 @@ function updateForm(id) {
 }
 </script>--> 
 
-<script type="text/javascript">
-function updateForm(id) {
-  $('#VoorraadForm').load('?controller=voorraad&action=index&id=' + id);
-}
+<script type="text/javascript">   
+ 
 
-function deleteForm(id) {
-  
-}
 </script>
 
 	</head>
@@ -100,5 +95,6 @@ function deleteForm(id) {
         });
       //]]>
 	</script>-->
+        <script src="js/maintainscroll.jquery.js" type="text/javascript"></script>
   <body>
 <html>

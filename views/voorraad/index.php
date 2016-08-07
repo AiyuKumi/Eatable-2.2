@@ -45,7 +45,7 @@
 				<?php foreach($voorraaditems as $voorraad) { ?>
 				<tr>
 					<td><?php echo $voorraad->categorie; ?></td>
-					<td><a style="color:black" href="#" onClick="updateForm(<?php echo $voorraad->voorraadId; ?>)"><?php echo $voorraad->product; ?></a></td><!-- href='?controller=voorraad&action=index&id=<?php echo $voorraad->voorraadId; ?>'   onclick='updateForm(<?php echo $voorraad->voorraadId; ?>)' href='#'-->
+					<td><a style="color:black" href="?controller=voorraad&action=index&id=<?php echo $voorraad->voorraadId; ?>" ><?php echo $voorraad->product; ?></a></td><!-- onClick="updateForm(<?php echo $voorraad->voorraadId; ?>)"-->
 					<td <?php if($voorraad->hoeveelheid == 0){ echo" style= color:red ";}?> ><?php echo $voorraad->hoeveelheid; ?></td>
 					<td><?php echo $voorraad->eenheid; ?></td>
 					<td><?php echo $voorraad->locatie; ?></td>
@@ -59,9 +59,9 @@
 
 
 
-<div class="row" id="VoorraadForm">>
+<div class="row" id="VoorraadForm">
 	<div class="col-xs-6 col-md-4">
-		<div class="panel panel-default" ><!--style="position: fixed; right: 5%; top:70px" -->
+		<div class="panel panel-default" style="position: fixed; right: 5%; top:170px"><!-- -->
 			<div class="panel-body"> 
 				<form ><!--action="../php/product_insert.php" method="post"-->
 					<div class="form-group">
@@ -107,7 +107,7 @@
 					<input type="submit" name="KnopOpslaan" id="submitknop" value="Opslaan">
 					<?php if($voorraaditem != null) { ?>
 						<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen">
-						<!--<input type="submit" name="KnopAnnuleren" id="KnopAnnuleren" value="Annuleren" onClick="deleteForm()">-->
+						<!--<input type="submit" name="KnopAnnuleren" id="KnopAnnuleren" value="Annuleren">-->
 					<?php } ?>			
 				</form>
 			</div>

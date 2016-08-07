@@ -24,7 +24,7 @@
 	
 	 public function find() {
       // we expect a url of form ?controller=posts&action=show&id=x
-      $voorraad = Voorraad::find(isset($_GET['id']) ? $_GET['id'] : null);
+      $voorraaditem = Voorraad::find(isset($_GET['id']) ? $_GET['id'] : null);
 	  //$voorraad = Voorraad::find(isset($id) ? $id : null);
     } 
 		

@@ -101,7 +101,7 @@
 	  } else return null;
     }
 	
-	public static function edit($id, $categorie, $product, $hoev, $eenheid, $locatie, $datum) {
+    public static function edit($id, $categorie, $product, $hoev, $eenheid, $locatie, $datum) {
       $db = Db::getInstance();
       // we make sure $id is an integer
       $id = intval($id);
