@@ -33,12 +33,6 @@ function updateForm(id) {
   };
 }
 </script>--> 
-
-<script type="text/javascript">   
- 
-
-</script>
-
 	</head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -68,6 +62,9 @@ function updateForm(id) {
 	  <form class="navbar-form navbar-right" >  
 		<div class="form-group">
 			<!--<a href="profiel.php" class="navbar-link">Ingelogd als <?php echo" $login_session "?></a></li>-->
+                    <a href="profiel.php" class="navbar-link">Ingelogd als 
+                        <?php if(isset($_COOKIE["UserName"])) {  echo  $_COOKIE["UserName"]; }?>
+                    </a>
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
 			</button>
 			<a class="btn btn-default" href="../php/logout.php" role="button">Uitloggen</a>
@@ -87,7 +84,7 @@ function updateForm(id) {
 	<script src="js/jquery-1.12.3.min.js" type="text/javascript"></script>
 	<script src="js/bootstrap.min.js" type="text/javascript"></script>
 	<!--<script src="js/dropdown.js" type="text/javascript"></script>	-->
-	<script src="js/bootstrap-combobox.js" type="text/javascript"></script>
+	<!--<script src="js/bootstrap-combobox.js" type="text/javascript"></script>-->
 	<!--<script type="text/javascript">
       //<![CDATA[
         $(document).ready(function(){
@@ -95,6 +92,7 @@ function updateForm(id) {
         });
       //]]>
 	</script>-->
-        <script src="js/maintainscroll.jquery.js" type="text/javascript"></script>
+        <!--<script src="js/maintainscroll.jquery.js" type="text/javascript"></script>-->
+        <script src="js/datalist.js" type="text/javascript"></script>
   <body>
 <html>

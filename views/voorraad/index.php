@@ -2,9 +2,10 @@
 
 <div class="panel panel-default">
   <div class="panel-body">
-    <div class="btn-group">
+    <label for="Categorie">Sorteer op: </label>
+    <div class="btn-group">       
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Sorteer op
+			<!--current selection -->Categorie
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
@@ -13,9 +14,10 @@
 			<li><a href="#">Datum: oudste eerst</a></li>
 		</ul>
 	</div>
+    <label for="Categorie">Toon: </label>
 	<div class="btn-group">
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Toon
+			<!--current selection -->Alles
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
@@ -40,7 +42,7 @@
 					<th>Eenheid</th>
 					<th>Locatie</th>
 					<th>Datum</th>
-					<!--<th> </th>-->
+					<th> </th>
 					</tr>
 				<?php foreach($voorraaditems as $voorraad) { ?>
 				<tr>
@@ -50,6 +52,9 @@
 					<td><?php echo $voorraad->eenheid; ?></td>
 					<td><?php echo $voorraad->locatie; ?></td>
 					<td><?php echo $voorraad->datum; ?></td>
+                                        <td><button type="button" class="btn btn-default btn-sm"><!--Winkelkar-->
+                                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                        </button></td>
 					<!--<td><a onClick=\"javascript:return confirm('Ben je zeker dat je <?php echo $voorraad->product; ?> wilt verwijderen?')\" href=../php/product_delete.php?id=" . $row["voorraadId"]. "><img src=../img/delete_icon.png></a> </td>-->
 				</tr>
 				<?php } ?>	
@@ -70,12 +75,14 @@
 					</div>
 					<div class="form-group">
 						<label for="Categorie">Categorie: </label><br>
-						<input list="Categorie" class="combobox" name="Categorie" autocomplete="off" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->categorie; ?> <?php } ?>	">	
-						<datalist id="Categorie">
+						<input list="Categorie" class="combobox" name="Categorie" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->categorie; ?> <?php } ?>">	
+                                                <datalist id="Categorie">
+                                                    <!--<div style="overflow-x: hidden; overflow: scroll; height:20px">-->
 							<?php foreach($voorraadcategories as $categorie) { ?>
 								<option><?php echo $categorie; ?></option>
-							<?php } ?>	
-						</datalist>
+							<?php } ?>
+                                                                <!--</div>-->
+						</datalist>      
 					</div>					
 					
 					<div class="form-group">
@@ -84,7 +91,7 @@
 					</div>
 					<div class="form-group">
 						<label for="Eenheid">Eenheid: </label><br>
-						<input list="Eenheid" class="combobox" name="Eenheid" autocomplete="off" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid; ?> <?php } ?>">	
+						<input list="Eenheid" class="combobox" name="Eenheid" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid; ?> <?php } ?>">	
 						<datalist id="Eenheid">
 							<?php foreach($voorraadeenheden as $eenheid) { ?>
 								<option><?php echo $eenheid; ?></option>
@@ -93,7 +100,7 @@
 					</div>
 					<div class="form-group">
 						<label for="Locatie">Locatie: </label><br>
-						<input list="Locatie" class="combobox" name="Locatie" autocomplete="off" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->locatie; ?> <?php } ?>">	
+						<input list="Locatie" class="combobox" name="Locatie" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->locatie; ?> <?php } ?>">	
 						<datalist id="Locatie">
 							<?php foreach($voorraadlocaties as $locatie) { ?>
 								<option><?php echo $locatie; ?></option>
@@ -104,11 +111,20 @@
 						<label for="Datum">Datum</label><br>
 						<input type="date" name="Datum" id="Datum" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->datum; ?> <?php } ?>">
 					</div>
-					<input type="submit" name="KnopOpslaan" id="submitknop" value="Opslaan">
+                                    <div class="btn btn-default" role="group" aria-label="...">
+                                        <button type="button" class="btn btn-success"><!--Opslaan-->
+                                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                                        </button>
+					<!--<input type="submit" name="KnopOpslaan" id="submitknop" value="Opslaan">-->
 					<?php if($voorraaditem != null) { ?>
-						<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen">
-						<!--<input type="submit" name="KnopAnnuleren" id="KnopAnnuleren" value="Annuleren">-->
-					<?php } ?>			
+                                        <button type="button" class="btn btn-danger"><!--Verwijderen-->
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                        </button>
+                                        <!--Annuleren-->                                                                             
+                                        <a href="?controller=voorraad&action=index" class="btn btn-info" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                                        <!--<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen"></br>-->
+					<?php } ?>
+                                    </div>      
 				</form>
 			</div>
 		</div>

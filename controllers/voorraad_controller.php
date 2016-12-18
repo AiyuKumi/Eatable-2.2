@@ -2,7 +2,7 @@
   class VoorraadController {
     public function index() {
       // we store all the voorraaditems in a variable
-      $voorraaditems = Voorraad::all();
+      $voorraaditems = Voorraad::all(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	  $voorraadcategories = Voorraad::allCategories();
 	  $voorraadeenheden = Voorraad::allEenheden();
 	  $voorraadlocaties = Voorraad::allLocaties();

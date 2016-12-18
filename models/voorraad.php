@@ -10,9 +10,9 @@
 	public $Locatie;
 	public $Datum;
 
-    public function __construct($voorraadId, $gebruikerId, $Categorie, $Product, $Hoeveelheid, $Eenheid, $Locatie, $Datum) {
+    public function __construct($voorraadId, $gebruikerid, $Categorie, $Product, $Hoeveelheid, $Eenheid, $Locatie, $Datum) {
       $this->voorraadId = $voorraadId;
-      $this->gebruikerId  = $gebruikerId;
+      $this->gebruikerid  = $gebruikerid;
       $this->categorie = $Categorie;
 	  $this->product = $Product;
 	  $this->hoeveelheid = $Hoeveelheid;
@@ -21,11 +21,11 @@
 	  $this->datum = $Datum;
     }
 
-    public static function all() {
+    public static function all($gebruikerid) {
       $list = [];
       $db = Db::getInstance();
-      $req = $db->query('SELECT * FROM voorraad');
-
+      $req = $db->prepare('SELECT * FROM voorraad WHERE gebruikerid = :gebruikerid');
+      $req->execute(array('gebruikerid' => $gebruikerid) );
       // we create a list of Voorraad objects from the database results
       foreach($req->fetchAll() as $voorraad) {
         $list[] = new Voorraad($voorraad['VoorraadId'],

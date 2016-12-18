@@ -8,6 +8,10 @@
       case 'pages':
         $controller = new PagesController();
       break;
+        case 'login':
+        require_once('models/login.php');
+        $controller = new LoginController();
+      break;
 	  case 'voorraad':
 		// we need the model to query the database later in the controller
         require_once('models/voorraad.php');
@@ -26,7 +30,8 @@
 
   // just a list of the controllers we have and their actions
   // we consider those "allowed" values
-  $controllers = array('pages' => ['home', 'error'],
+  $controllers = array('pages' => ['home' ,'error'],
+                        'login' => ['login' ,'error'],
                         'voorraad' => ['index', 'find'],
 			'recepten' => ['index', 'show']);
 
