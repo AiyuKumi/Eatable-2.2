@@ -4,7 +4,7 @@
   <div class="panel-body">
     <label for="Categorie">Sorteer op: </label>
     <div class="btn-group">       
-		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<!--current selection -->Categorie
 			<span class="caret"></span>
 		</button>
@@ -16,7 +16,7 @@
 	</div>
     <label for="Categorie">Toon: </label>
 	<div class="btn-group">
-		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<!--current selection -->Alles
 			<span class="caret"></span>
 		</button>
@@ -46,7 +46,7 @@
 					</tr>
 				<?php foreach($voorraaditems as $voorraad) { ?>
 				<tr>
-					<td><?php echo $voorraad->categorie; ?></td>
+					<td><?php echo $voorraad->categorieId; ?></td>
 					<td><a style="color:black" href="?controller=voorraad&action=index&id=<?php echo $voorraad->voorraadId; ?>" ><?php echo $voorraad->product; ?></a></td><!-- onClick="updateForm(<?php echo $voorraad->voorraadId; ?>)"-->
 					<td <?php if($voorraad->hoeveelheid == 0){ echo" style= color:red ";}?> ><?php echo $voorraad->hoeveelheid; ?></td>
 					<td><?php echo $voorraad->eenheid; ?></td>
@@ -111,20 +111,20 @@
 						<label for="Datum">Datum</label><br>
 						<input type="date" name="Datum" id="Datum" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->datum; ?> <?php } ?>">
 					</div>
-                                    <div class="btn btn-default" role="group" aria-label="...">
-                                        <button type="button" class="btn btn-success"><!--Opslaan-->
-                                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                                        </button>
-					<!--<input type="submit" name="KnopOpslaan" id="submitknop" value="Opslaan">-->
-					<?php if($voorraaditem != null) { ?>
-                                        <button type="button" class="btn btn-danger"><!--Verwijderen-->
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                        </button>
-                                        <!--Annuleren-->                                                                             
-                                        <a href="?controller=voorraad&action=index" class="btn btn-info" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
-                                        <!--<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen"></br>-->
-					<?php } ?>
-                                    </div>      
+                                        <div >
+                                            <button type="button" class="btn btn-success btn-sm" ><!--Opslaan-->
+                                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                                            </button>
+                                            <!--<input type="submit" name="KnopOpslaan" id="submitknop" value="Opslaan">-->
+                                            <?php if($voorraaditem != null) { ?>
+                                            <button type="button" class="btn btn-danger btn-sm"><!--Verwijderen-->
+                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                            </button>
+                                            <!--Annuleren-->                                                                             
+                                            <!--<a href="?controller=voorraad&action=index" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>-->
+                                            <!--<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen"></br>-->
+                                            <?php } ?>
+                                        </div>      
 				</form>
 			</div>
 		</div>
