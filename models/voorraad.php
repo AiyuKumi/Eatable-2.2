@@ -1,29 +1,29 @@
 <?php
-  class Voorraad {
+  class Voorraad {    
     public $voorraadId;
     public $gebruikerId;
     public $CategorieId;
     public $Product;
     public $Hoeveelheid;
     public $Eenheid;
-    public $Locatie;
+    public $LocatieId;
     public $Datum;
-
-    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Product, $Hoeveelheid, $Eenheid, $Locatie, $Datum) {
+    
+    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Product, $Hoeveelheid, $Eenheid, $LocatieId, $Datum) {
         $this->voorraadId = $voorraadId;
         $this->gebruikerid  = $gebruikerid;
         $this->categorieId = $CategorieId;
         $this->product = $Product;
 	$this->hoeveelheid = $Hoeveelheid;
 	$this->eenheid = $Eenheid;
-	$this->locatie = $Locatie;
+	$this->locatieId = $LocatieId;
 	$this->datum = $Datum;
     }
 
     public static function all($gebruikerid) {
         $list = [];
         $db = Db::getInstance();
-        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.Categorie, v.Product, v.Hoeveelheid, v.Eenheid, v.Locatie, v.Datum FROM voorraad v INNER JOIN voorraadCategorie vc ON v.CategorieId=vc.CategorieId WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie');
+        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.Categorie, v.Product, v.Hoeveelheid, v.Eenheid, vl.Locatie, v.Datum FROM voorraad v INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie');
         $req->execute(array('gebruikerid' => $gebruikerid) );
         // we create a list of Voorraad objects from the database results
         foreach($req->fetchAll() as $voorraad) {
@@ -39,13 +39,15 @@
         return $list;
     }
 	
-    public static function allCategories() {
+    public static function allCategories($gebruikerid) {
       $list = [];
       $db = Db::getInstance();
-      $req = $db->query('SELECT DISTINCT CategorieId, Categorie FROM voorraadCategorie');
+      $req = $db->prepare('SELECT DISTINCT vc.CategorieId, vc.Categorie FROM voorraadCategorie vc INNER JOIN voorraad v ON v.CategorieId = vc.CategorieId WHERE v.gebruikerid = :gebruikerid');
+      $req->execute(array('gebruikerid' => $gebruikerid) );      
       // we create a list of Voorraad objects from the database results
       foreach($req->fetchAll() as $voorraadcatgorie) {
-        $list[] = $voorraadcatgorie['Categorie'];
+          $list[] = new VoorraadCategorie($voorraadcatgorie['CategorieId'],
+                $voorraadcatgorie['Categorie']) ;
       }
       return $list;
     }
@@ -62,14 +64,15 @@
       return $list;
     }
 	 
-    public static function allLocaties() {
+    public static function allLocaties($gebruikerid) {
       $list = [];
       $db = Db::getInstance();
-      $req = $db->query('SELECT DISTINCT Locatie FROM voorraad');
-
+      $req = $db->prepare('SELECT DISTINCT vl.LocatieId, vl.Locatie FROM voorraadLocatie vl INNER JOIN voorraad v ON v.LocatieId = vl.LocatieId WHERE v.gebruikerid = :gebruikerid');
+      $req->execute(array('gebruikerid' => $gebruikerid) );   
       // we create a list of Voorraad objects from the database results
       foreach($req->fetchAll() as $voorraadlocaties) {
-        $list[] = $voorraadlocaties['Locatie'];
+        $list[] = new VoorraadLocatie($voorraadlocaties['LocatieId'],
+                $voorraadlocaties['Locatie']);
       }
       return $list;
     }
@@ -90,7 +93,7 @@
 						  $voorraad['Product'],
 						  $voorraad['Hoeveelheid'],
 						  $voorraad['Eenheid'],
-						  $voorraad['Locatie'],
+						  $voorraad['LocatieId'],
 						  $voorraad['Datum']);
 	  } else return null;
     }
@@ -121,4 +124,24 @@
 						  $voorraad['Datum']);
     }
   }
+  
+  class VoorraadCategorie{    
+    public $categorieId;
+    public $categorie;
+    
+    public function __construct($CategorieId, $Categorie) {
+        $this->categorieId = $CategorieId;
+        $this->categorie = $Categorie;
+    }
+  }
+    
+   class VoorraadLocatie{    
+    public $locatieId;
+    public $locatie;
+    
+    public function __construct($LocatieId, $Locatie) {
+        $this->locatieId = $LocatieId;
+        $this->locatie = $Locatie;
+    }
+    }
 ?>

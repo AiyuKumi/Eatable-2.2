@@ -92,7 +92,7 @@ function updateForm(id) {
         });
       //]]>
 	</script>-->
-        <!--<script src="js/maintainscroll.jquery.js" type="text/javascript"></script>-->
+        <script src="js/maintainscroll.jquery.js" type="text/javascript"></script>
         <script src="js/datalist.js" type="text/javascript"></script>
   <body>
 <html>

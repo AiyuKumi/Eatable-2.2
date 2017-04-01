@@ -3,9 +3,9 @@
     public function index() {
       // we store all the voorraaditems in a variable
       $voorraaditems = Voorraad::all(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
-	  $voorraadcategories = Voorraad::allCategories();
+	  $voorraadcategories = Voorraad::allCategories(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	  $voorraadeenheden = Voorraad::allEenheden();
-	  $voorraadlocaties = Voorraad::allLocaties();
+	  $voorraadlocaties = Voorraad::allLocaties(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	  //$voorraaditem = $this->find();
 	  $voorraaditem = Voorraad::find(isset($_GET['id']) ? $_GET['id'] : null);
       require_once('views/voorraad/index.php');

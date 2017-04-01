@@ -1,0 +1,9 @@
+UPDATE `voorraad` SET `LocatieId`= 1 WHERE `Locatie` = "Diepvries wasplaats";
+UPDATE `voorraad` SET `LocatieId`= 2 WHERE `Locatie` = "Diepvries kelder";
+
+INSERT INTO `voorraadLocatie`(`LocatieId`, `Locatie`) VALUES (1,"Diepvries wasplaats");
+INSERT INTO `voorraadLocatie`(`LocatieId`, `Locatie`) VALUES (2,"Diepvries kelder");
+
+SELECT distinct vc.CategorieId, vc.Categorie FROM voorraadCategorie vc
+INNER JOIN voorraad v ON v.CategorieId = vc.CategorieId
+WHERE v.gebruikerid = 2
