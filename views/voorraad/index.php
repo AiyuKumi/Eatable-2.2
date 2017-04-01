@@ -49,7 +49,7 @@
 					<td><?php echo $voorraad->categorieId; ?></td>
 					<td><a style="color:black" href="?controller=voorraad&action=index&id=<?php echo $voorraad->voorraadId; ?>" ><?php echo $voorraad->product; ?></a></td><!-- onClick="updateForm(<?php echo $voorraad->voorraadId; ?>)"-->
 					<td <?php if($voorraad->hoeveelheid == 0){ echo" style= color:red ";}?> ><?php echo $voorraad->hoeveelheid; ?></td>
-					<td><?php echo $voorraad->eenheid; ?></td>
+					<td><?php echo $voorraad->eenheidId; ?></td>
 					<td><?php echo $voorraad->locatieId; ?></td>
 					<td><?php echo $voorraad->datum; ?></td>
                                         <td><button type="button" class="btn btn-default btn-sm"><!--Winkelkar-->
@@ -91,10 +91,10 @@
 					</div>
 					<div class="form-group">
 						<label for="Eenheid">Eenheid: </label><br>
-						<input list="Eenheid" class="combobox" name="Eenheid" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid; ?> <?php } ?>">	
+						<input list="Eenheid" class="combobox" name="Eenheid" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheidId; ?> <?php } ?>">	
 						<datalist id="Eenheid">
 							<?php foreach($voorraadeenheden as $eenheid) { ?>
-								<option><?php echo $eenheid; ?></option>
+								<option><?php echo $eenheid->eenheid; ?></option>
 							<?php } ?>	
 						</datalist>
 					</div>

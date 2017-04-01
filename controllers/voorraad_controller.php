@@ -4,7 +4,7 @@
       // we store all the voorraaditems in a variable
       $voorraaditems = Voorraad::all(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	  $voorraadcategories = Voorraad::allCategories(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
-	  $voorraadeenheden = Voorraad::allEenheden();
+	  $voorraadeenheden = Voorraad::allEenheden(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	  $voorraadlocaties = Voorraad::allLocaties(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	  //$voorraaditem = $this->find();
 	  $voorraaditem = Voorraad::find(isset($_GET['id']) ? $_GET['id'] : null);

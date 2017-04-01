@@ -7,3 +7,31 @@ INSERT INTO `voorraadLocatie`(`LocatieId`, `Locatie`) VALUES (2,"Diepvries kelde
 SELECT distinct vc.CategorieId, vc.Categorie FROM voorraadCategorie vc
 INNER JOIN voorraad v ON v.CategorieId = vc.CategorieId
 WHERE v.gebruikerid = 2
+
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (1,"stuk(s)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (2,"zak(ken)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (3,"geel potje(s)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (4,"pot(ten)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (5,"pak(ken)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (6,"kg");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (7,"lange pot(ten)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (8,"schotel");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (9,"potje(s)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (10,"wit potje(s)");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (11,"doos");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (12,"gr");
+INSERT INTO `voorraadEenheid`(`EenheidId`, `Eenheid`) VALUES (13,"pakje(s)");
+
+UPDATE `voorraad` SET `EenheidId`= 1 WHERE `Eenheid` = "stuk(s)";
+UPDATE `voorraad` SET `EenheidId`= 2 WHERE `Eenheid` = "zak(ken)";
+UPDATE `voorraad` SET `EenheidId`= 3 WHERE `Eenheid` = "geel potje(s)";
+UPDATE `voorraad` SET `EenheidId`= 4 WHERE `Eenheid` = "pot(ten)";
+UPDATE `voorraad` SET `EenheidId`= 5 WHERE `Eenheid` = "pak(ken)";
+UPDATE `voorraad` SET `EenheidId`= 6 WHERE `Eenheid` = "kg";
+UPDATE `voorraad` SET `EenheidId`= 7 WHERE `Eenheid` = "lange pot(ten)";
+UPDATE `voorraad` SET `EenheidId`= 8 WHERE `Eenheid` = "schotel(s)";
+UPDATE `voorraad` SET `EenheidId`= 9 WHERE `Eenheid` = "potje(s)";
+UPDATE `voorraad` SET `EenheidId`= 10 WHERE `Eenheid` = "wit potje(s)";
+UPDATE `voorraad` SET `EenheidId`= 11 WHERE `Eenheid` = "doos";
+UPDATE `voorraad` SET `EenheidId`= 12 WHERE `Eenheid` = "gr";
+UPDATE `voorraad` SET `EenheidId`= 13 WHERE `Eenheid` = "pakje(s)";

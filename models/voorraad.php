@@ -5,17 +5,17 @@
     public $CategorieId;
     public $Product;
     public $Hoeveelheid;
-    public $Eenheid;
+    public $EenheidId;
     public $LocatieId;
     public $Datum;
     
-    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Product, $Hoeveelheid, $Eenheid, $LocatieId, $Datum) {
+    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Product, $Hoeveelheid, $EenheidId, $LocatieId, $Datum) {
         $this->voorraadId = $voorraadId;
         $this->gebruikerid  = $gebruikerid;
         $this->categorieId = $CategorieId;
         $this->product = $Product;
 	$this->hoeveelheid = $Hoeveelheid;
-	$this->eenheid = $Eenheid;
+	$this->eenheidId = $EenheidId;
 	$this->locatieId = $LocatieId;
 	$this->datum = $Datum;
     }
@@ -23,7 +23,12 @@
     public static function all($gebruikerid) {
         $list = [];
         $db = Db::getInstance();
-        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.Categorie, v.Product, v.Hoeveelheid, v.Eenheid, vl.Locatie, v.Datum FROM voorraad v INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie');
+        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.Categorie, v.Product, v.Hoeveelheid, ve.Eenheid, vl.Locatie, v.Datum '
+                . 'FROM voorraad v '
+                . 'INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
+                . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
+                . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
+                . 'WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie');
         $req->execute(array('gebruikerid' => $gebruikerid) );
         // we create a list of Voorraad objects from the database results
         foreach($req->fetchAll() as $voorraad) {
@@ -42,7 +47,10 @@
     public static function allCategories($gebruikerid) {
       $list = [];
       $db = Db::getInstance();
-      $req = $db->prepare('SELECT DISTINCT vc.CategorieId, vc.Categorie FROM voorraadCategorie vc INNER JOIN voorraad v ON v.CategorieId = vc.CategorieId WHERE v.gebruikerid = :gebruikerid');
+      $req = $db->prepare('SELECT DISTINCT vc.CategorieId, vc.Categorie '
+              . 'FROM voorraadCategorie vc '
+              . 'INNER JOIN voorraad v ON v.CategorieId = vc.CategorieId '
+              . 'WHERE v.gebruikerid = :gebruikerid');
       $req->execute(array('gebruikerid' => $gebruikerid) );      
       // we create a list of Voorraad objects from the database results
       foreach($req->fetchAll() as $voorraadcatgorie) {
@@ -52,14 +60,18 @@
       return $list;
     }
 	 
-    public static function allEenheden() {
+    public static function allEenheden($gebruikerid) {
       $list = [];
       $db = Db::getInstance();
-      $req = $db->query('SELECT DISTINCT Eenheid FROM voorraad');
-
+      $req = $db->prepare('SELECT DISTINCT ve.EenheidId, ve.Eenheid '
+              . 'FROM voorraadEenheid ve '
+              . 'INNER JOIN voorraad v ON v.EenheidId = ve.EenheidId '
+              . 'WHERE v.gebruikerid = :gebruikerid');
+      $req->execute(array('gebruikerid' => $gebruikerid) ); 
       // we create a list of Voorraad objects from the database results
       foreach($req->fetchAll() as $voorraadeenheden) {
-        $list[] = $voorraadeenheden['Eenheid'];
+        $list[] = new VoorraadEenheid($voorraadeenheden['EenheidId'],
+                $voorraadeenheden['Eenheid']);
       }
       return $list;
     }
@@ -67,7 +79,10 @@
     public static function allLocaties($gebruikerid) {
       $list = [];
       $db = Db::getInstance();
-      $req = $db->prepare('SELECT DISTINCT vl.LocatieId, vl.Locatie FROM voorraadLocatie vl INNER JOIN voorraad v ON v.LocatieId = vl.LocatieId WHERE v.gebruikerid = :gebruikerid');
+      $req = $db->prepare('SELECT DISTINCT vl.LocatieId, vl.Locatie '
+              . 'FROM voorraadLocatie vl '
+              . 'INNER JOIN voorraad v ON v.LocatieId = vl.LocatieId '
+              . 'WHERE v.gebruikerid = :gebruikerid');
       $req->execute(array('gebruikerid' => $gebruikerid) );   
       // we create a list of Voorraad objects from the database results
       foreach($req->fetchAll() as $voorraadlocaties) {
@@ -92,7 +107,7 @@
 						  $voorraad['CategorieId'],
 						  $voorraad['Product'],
 						  $voorraad['Hoeveelheid'],
-						  $voorraad['Eenheid'],
+						  $voorraad['EenheidId'],
 						  $voorraad['LocatieId'],
 						  $voorraad['Datum']);
 	  } else return null;
@@ -125,7 +140,7 @@
     }
   }
   
-  class VoorraadCategorie{    
+class VoorraadCategorie{    
     public $categorieId;
     public $categorie;
     
@@ -133,9 +148,9 @@
         $this->categorieId = $CategorieId;
         $this->categorie = $Categorie;
     }
-  }
+}
     
-   class VoorraadLocatie{    
+ class VoorraadLocatie{    
     public $locatieId;
     public $locatie;
     
@@ -143,5 +158,15 @@
         $this->locatieId = $LocatieId;
         $this->locatie = $Locatie;
     }
+}
+    
+class VoorraadEenheid{    
+    public $eenheidId;
+    public $eenheid;
+    
+    public function __construct($EenheidId, $Eenheid) {
+        $this->eenheidId = $EenheidId;
+        $this->eenheid = $Eenheid;
     }
+}
 ?>
