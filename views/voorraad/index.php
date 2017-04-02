@@ -120,7 +120,10 @@
                                             <button type="button" class="btn btn-danger btn-sm"><!--Verwijderen-->
                                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                             </button>
-                                            <!--Annuleren-->                                                                             
+                                            <a href="?controller=voorraad&action=index" class="btn btn-primary btn-sm" role="button"><!--Annuleren-->
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                <a href="?controller=voorraad&action=index" ></a>
+                                            </a> 
                                             <!--<a href="?controller=voorraad&action=index" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>-->
                                             <!--<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen"></br>-->
                                             <?php } ?>
