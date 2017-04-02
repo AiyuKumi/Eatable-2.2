@@ -101,15 +101,14 @@
 		// the query was prepared, now we replace :id with our actual $id value
 		$req->execute(array('id' => $id));
 		$voorraad = $req->fetch();
-
 		return new Voorraad($voorraad['VoorraadId'],
-						  $voorraad['GebruikerId'], 
-						  $voorraad['CategorieId'],
-						  $voorraad['Product'],
-						  $voorraad['Hoeveelheid'],
-						  $voorraad['EenheidId'],
-						  $voorraad['LocatieId'],
-						  $voorraad['Datum']);
+			$voorraad['GebruikerId'], 
+			$voorraad['CategorieId'],
+			$voorraad['Product'],
+			$voorraad['Hoeveelheid'],
+			$voorraad['EenheidId'],
+			$voorraad['LocatieId'],
+			$voorraad['Datum']);
 	  } else return null;
     }
 	
