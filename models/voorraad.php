@@ -3,41 +3,50 @@
     public $voorraadId;
     public $gebruikerId;
     public $CategorieId;
+    public $Categorie;
     public $Product;
     public $Hoeveelheid;
     public $EenheidId;
+    public $Eenheid;
     public $LocatieId;
+    public $Locatie;
     public $Datum;
     
-    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Product, $Hoeveelheid, $EenheidId, $LocatieId, $Datum) {
+    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Categorie, $Product, $Hoeveelheid, $EenheidId, $Eenheid, $LocatieId, $Locatie, $Datum) {
         $this->voorraadId = $voorraadId;
         $this->gebruikerid  = $gebruikerid;
         $this->categorieId = $CategorieId;
+        $this->categorie = $Categorie;
         $this->product = $Product;
 	$this->hoeveelheid = $Hoeveelheid;
 	$this->eenheidId = $EenheidId;
+        $this->eenheid = $Eenheid;
 	$this->locatieId = $LocatieId;
+        $this->locatie = $Locatie;
 	$this->datum = $Datum;
     }
 
     public static function all($gebruikerid) {
         $list = [];
         $db = Db::getInstance();
-        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.Categorie, v.Product, v.Hoeveelheid, ve.Eenheid, vl.Locatie, v.Datum '
+        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId ,vl.Locatie, v.Datum '
                 . 'FROM voorraad v '
                 . 'INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
                 . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
                 . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
-                . 'WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie');
+                . 'WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie, v.product');
         $req->execute(array('gebruikerid' => $gebruikerid) );
         // we create a list of Voorraad objects from the database results
         foreach($req->fetchAll() as $voorraad) {
             $list[] = new Voorraad($voorraad['VoorraadId'],
 		$voorraad['GebruikerId'], 
-		$voorraad['Categorie'],
+		$voorraad['CategorieId'],
+                $voorraad['Categorie'],
 		$voorraad['Product'],
 		$voorraad['Hoeveelheid'],
+                $voorraad['EenheidId'],
 		$voorraad['Eenheid'],
+                $voorraad['LocatieId'],
 		$voorraad['Locatie'],
 		$voorraad['Datum']);
         }
@@ -97,17 +106,26 @@
       // we make sure $id is an integer
 	  if(!is_null($id)){
 		$id = intval($id);
-		$req = $db->prepare('SELECT * FROM voorraad WHERE VoorraadId = :id');
+                $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId, vl.Locatie, v.Datum '
+                . 'FROM voorraad v '
+                . 'INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
+                . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
+                . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
+                . 'WHERE VoorraadId = :id');
+//		$req = $db->prepare('SELECT * FROM voorraad WHERE VoorraadId = :id');
 		// the query was prepared, now we replace :id with our actual $id value
 		$req->execute(array('id' => $id));
 		$voorraad = $req->fetch();
 		return new Voorraad($voorraad['VoorraadId'],
 			$voorraad['GebruikerId'], 
 			$voorraad['CategorieId'],
+                        $voorraad['Categorie'],
 			$voorraad['Product'],
 			$voorraad['Hoeveelheid'],
-			$voorraad['EenheidId'],
+                        $voorraad['EenheidId'],
+			$voorraad['Eenheid'],
 			$voorraad['LocatieId'],
+                        $voorraad['Locatie'],
 			$voorraad['Datum']);
 	  } else return null;
     }
