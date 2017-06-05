@@ -26,7 +26,7 @@
 	$this->datum = $Datum;
     }
 
-    public static function all($gebruikerid) {
+    public static function all($gebruikerid) {        
         $list = [];
         $db = Db::getInstance();
         $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId ,vl.Locatie, v.Datum '
@@ -34,8 +34,9 @@
                 . 'INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
                 . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
                 . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
-                . 'WHERE v.gebruikerid = :gebruikerid ORDER BY vc.Categorie, v.product');
-        $req->execute(array('gebruikerid' => $gebruikerid) );
+                . 'WHERE v.gebruikerid = :gebruikerid '
+                . 'ORDER BY vc.Categorie, v.product');
+        $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach($req->fetchAll() as $voorraad) {
             $list[] = new Voorraad($voorraad['VoorraadId'],
@@ -112,7 +113,6 @@
                 . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
                 . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
                 . 'WHERE VoorraadId = :id');
-//		$req = $db->prepare('SELECT * FROM voorraad WHERE VoorraadId = :id');
 		// the query was prepared, now we replace :id with our actual $id value
 		$req->execute(array('id' => $id));
 		$voorraad = $req->fetch();
@@ -130,32 +130,45 @@
 	  } else return null;
     }
 	
-    public static function edit($id, $categorieId, $product, $hoev, $eenheid, $locatie, $datum) {
+    public static function save($id, $gebruikerId, $product, $categorieId, $hoeveelheid, $eenheidId, $locatieId, $datum) {
       $db = Db::getInstance();
-      // we make sure $id is an integer
-      $id = intval($id);
-      $req = $db->prepare('UPDATE voorraad 
-							set categorieId=:categorieId,
-							product=:product, 
-							hoeveelheid=:hoev, 
-							eenheid=:eenheid, 
-							locatie=:locatie, 
-							datum=:datum
-							where voorraadid=:id');
-      // the query was prepared, now we replace :id with our actual $id value
+      
+//      list($y, $m, $d) = explode('-', $datum);
+//        if(checkdate($m, $d, $y)) {
+//            $datumchecked = $datum;
+//        }elseif(!checkdate($m, $d, $y)) {
+//            $datumchecked = null;            
+//        }
+        
+      if(!is_null($id)){ //Id is not null, so we are editing a voorraaditem
+        $id = intval($id);
+        $req = $db->prepare('UPDATE voorraad 
+				set categorieId=:categorieId,
+				product=:product, 
+				hoeveelheid=:hoev, 
+				eenheid=:eenheid, 
+				locatie=:locatie, 
+				datum=:datum
+				where voorraadid=:id');
       $req->execute(array('id' => $id, 'categorie' => $categorieId, 'product' => $product, 'hoeveelheid' => $hoev, 'eenheid' => $eenheid, 'locatie' => $locatie, 'datum' => $datum));
-      $post = $req->fetch();
 
-      return new Voorraad($voorraad['VoorraadId'],
-						  $voorraad['GebruikerId'], 
-						  $voorraad['CategorieId'],
-						  $voorraad['Product'],
-						  $voorraad['Hoeveelheid'],
-						  $voorraad['Eenheid'],
-						  $voorraad['Locatie'],
-						  $voorraad['Datum']);
+       }
+        else { //Id is null, so we are creating a new voorraaditem
+        $req = $db->prepare('INSERT INTO voorraad (GebruikerId, CategorieId, Product, Hoeveelheid, EenheidId, LocatieId, Datum) 
+             VALUES (3, 20, "test4", 1, 20, 20, null)');	
+//        VALUES (:gebruikerId, :categorieId, :product, :hoeveelheid, :eenheid, :locatie, :datum)');							
+        $req->execute(array('gebruikerId' => $gebruikerId, 
+            'categorieId' => $categorieId, 
+            'product' => $product, 
+            'hoeveelheid' => $hoeveelheid, 
+            'eenheidId' => $eenheidId,
+            'locatieId' => $locatieId, 
+            'datum' => $datum));       
+        }
+        return null;
     }
-  }
+    
+ } //end class Voorraad
   
 class VoorraadCategorie{    
     public $categorieId;

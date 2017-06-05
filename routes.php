@@ -32,7 +32,7 @@
   // we consider those "allowed" values
   $controllers = array('pages' => ['home' ,'error'],
                         'login' => ['login' ,'error'],
-                        'voorraad' => ['index', 'find'],
+                        'voorraad' => ['index', 'save'],
 			'recepten' => ['index', 'show']);
 
   // check that the requested controller and action are both allowed

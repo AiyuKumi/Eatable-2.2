@@ -2,10 +2,9 @@
 
 <div class="panel panel-default">
   <div class="panel-body">
-    <label for="Categorie">Sorteer op: </label>
     <div class="btn-group">       
-		<button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<!--current selection -->Categorie
+        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+			Sorteer op
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
@@ -13,17 +12,16 @@
 			<li><a href="#">Product</a></li>
 			<li><a href="#">Datum: oudste eerst</a></li>
 		</ul>
-	</div>
-    <label for="Categorie">Toon: </label>
+	</div>   
 	<div class="btn-group">
-		<button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<!--current selection -->Alles
+            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Filter op
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li><a href="#">Alles</a></li>
-			<li><a href="#">Enkel in voorraad</a></li>
-			<li><a href="#">Enkel uit voorraad</a></li>
+			<li onclick="FilterOnHoeveelheid('Alles')"><a href="#">Alles</a></li>                       
+			<li onclick="FilterOnHoeveelheid('InVoorraad')"><a href="#">Enkel in voorraad</a></li>
+			<li onclick="FilterOnHoeveelheid('UitVoorraad')"><a href="#">Enkel uit voorraad</a></li>
 		</ul>
 	</div>
   </div>
@@ -68,7 +66,7 @@
 	<div class="col-xs-6 col-md-4">
 		<div class="panel panel-default" style="position: fixed; right: 5%; top:170px">
 			<div class="panel-body"> 
-				<form >
+				<form action="?controller=voorraad&action=save" method="post" id="add_voorraaditem">
 					<div class="form-group">
 						<label for="Product">Product</label><br>
 						<input type="text" id="Product" name="Product" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->product;?><?php }?>">
@@ -109,17 +107,16 @@
 						<label for="Datum">Datum</label><br>
 						<input type="date" name="Datum" id="Datum" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->datum;?><?php }?>">
 					</div>
-                                        <div >
-                                            <button type="button" class="btn btn-success btn-sm" ><!--Opslaan-->
-                                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                                            </button>
+                                        <div >                                            
+                                             <button type="submit" class="btn btn-success btn-sm" ><!--Opslaan-->
+                                                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                                             </button>
                                             <?php if($voorraaditem != null) { ?>
                                             <button type="button" class="btn btn-danger btn-sm"><!--Verwijderen-->
                                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                             </button>
                                             <a href="?controller=voorraad&action=index" class="btn btn-primary btn-sm" role="button"><!--Annuleren-->
-                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                <a href="?controller=voorraad&action=index" ></a>
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>                                               
                                             </a> 
                                             <!--<a href="?controller=voorraad&action=index" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>-->
                                             <!--<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen"></br>-->
@@ -130,7 +127,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-

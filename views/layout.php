@@ -33,6 +33,44 @@ function updateForm(id) {
   };
 }
 </script>--> 
+
+<script>
+function FilterOnHoeveelheid(filter) {
+  // Declare variables 
+  var table, tr, td, i;
+  table = document.getElementById("VoorraadTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+        if(filter === 'Alles'){
+            if (Number(td.innerHTML) >= 0) {
+                tr[i].style.display = "";                
+            } else {
+                tr[i].style.display = "none";
+            }
+        } 
+        if(filter === 'InVoorraad'){
+            if (Number(td.innerHTML) > 0) {
+                tr[i].style.display = "";              
+            } else {
+                tr[i].style.display = "none";
+            } 
+        }
+        if(filter === 'UitVoorraad'){
+            if (Number(td.innerHTML) === 0) {
+                tr[i].style.display = "";               
+            } else {
+                tr[i].style.display = "none";
+            } 
+        }
+    } 
+  }
+}
+</script>
+
 	</head>
 <body>
 <nav class="navbar navbar-inverse">
