@@ -12,6 +12,9 @@
         require_once('models/login.php');
         $controller = new LoginController();
       break;
+        case 'logout':
+        $controller = new LogoutController();
+      break;
 	  case 'voorraad':
 		// we need the model to query the database later in the controller
         require_once('models/voorraad.php');
@@ -32,6 +35,7 @@
   // we consider those "allowed" values
   $controllers = array('pages' => ['home' ,'error'],
                         'login' => ['login' ,'error'],
+                        'logout' => ['logout' ,'error'],
                         'voorraad' => ['index', 'save'],
 			'recepten' => ['index', 'show']);
 

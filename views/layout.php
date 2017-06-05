@@ -91,12 +91,12 @@ function FilterOnHoeveelheid(filter) {
 		   <li role="presentation"><a href="menu.php">Menu</a></li>
 		   <li role="presentation"><a href="boodschappen.php">Boodschappenlijst</a></li> 
       </ul>	  
-      <form class="navbar-form navbar-left" role="search">
+<!--      <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control">
         </div>
         <button type="submit" class="btn btn-default">Zoeken</button>
-      </form>	  
+      </form>	  -->
 	  <form class="navbar-form navbar-right" >  
 		<div class="form-group">
 			<!--<a href="profiel.php" class="navbar-link">Ingelogd als <?php echo" $login_session "?></a></li>-->
@@ -105,7 +105,7 @@ function FilterOnHoeveelheid(filter) {
                     </a>
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
 			</button>
-			<a class="btn btn-default" href="../php/logout.php" role="button">Uitloggen</a>
+			<a class="btn btn-default" href="?controller=logout&action=logout" role="button">Uitloggen</a>
 		</div>
 	  </form>	  
     </div>

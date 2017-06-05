@@ -15,7 +15,7 @@
 	</div>   
 	<div class="btn-group">
             <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Filter op
+			Filter op voorraad
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
