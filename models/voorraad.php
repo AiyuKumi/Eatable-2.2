@@ -31,9 +31,9 @@
         $db = Db::getInstance();
         $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId ,vl.Locatie, v.Datum '
                 . 'FROM voorraad v '
-                . 'INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
-                . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
-                . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
+                . 'LEFT JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
+                . 'LEFT JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
+                . 'LEFT JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
                 . 'WHERE v.gebruikerid = :gebruikerid '
                 . 'ORDER BY vc.Categorie, v.product');
         $req->execute(array('gebruikerid' => $gebruikerid));
@@ -109,9 +109,9 @@
 		$id = intval($id);
                 $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId, vl.Locatie, v.Datum '
                 . 'FROM voorraad v '
-                . 'INNER JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
-                . 'INNER JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
-                . 'INNER JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
+                . 'LEFT JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
+                . 'LEFT JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
+                . 'LEFT JOIN voorraadEenheid ve ON v.EenheidId = ve.EenheidId '
                 . 'WHERE VoorraadId = :id');
 		// the query was prepared, now we replace :id with our actual $id value
 		$req->execute(array('id' => $id));
@@ -130,44 +130,125 @@
 	  } else return null;
     }
 	
-    public static function save($id, $gebruikerId, $product, $categorieId, $hoeveelheid, $eenheidId, $locatieId, $datum) {
+    public static function save($id, $gebruikerId, $product, $categorie, $hoev, $eenheid, $locatie, $datum) {
       $db = Db::getInstance();
       
-//      list($y, $m, $d) = explode('-', $datum);
-//        if(checkdate($m, $d, $y)) {
-//            $datumchecked = $datum;
-//        }elseif(!checkdate($m, $d, $y)) {
-//            $datumchecked = null;            
-//        }
+      if($datum === null){
+      list($y, $m, $d) = explode('-', $datum);
+        if(checkdate($m, $d, $y)) {
+            $time = strtotime($datum);
+            $datumchecked = date( 'y-m-d', $time);
+        }elseif(!checkdate($m, $d, $y)) {
+            $datumchecked = null;            
+        }
+      }else{
+          $datumchecked = null;
+      }
+      
+      if($hoev === null){
+          $hoeveelheid = null;
+      }else{
+          $hoeveelheid = $hoev;
+      }
         
-      if(!is_null($id)){ //Id is not null, so we are editing a voorraaditem
+        // Get the id from the selected categorie
+        // If a new categorie is entered (does not exist in database), add it
+        if(!is_null($categorie)){
+            $req = $db->prepare('SELECT vc.CategorieId '
+                . 'FROM voorraadCategorie vc '
+                . 'WHERE vc.Categorie = :categorie');
+		$req->execute(array('categorie' => $categorie));
+		$result = $req->fetch();
+                $categorieId=$result['CategorieId'];
+                if(is_null($categorieId)){
+                    $req = $db->prepare('INSERT INTO voorraadCategorie (Categorie) 
+                    VALUES (:categorie)');							
+                    $req->execute(array('categorie' => $categorie)); 
+                    
+                    $req2 = $db->prepare('SELECT vc.CategorieId '
+                    . 'FROM voorraadCategorie vc '
+                    . 'WHERE vc.Categorie = :categorie');
+                    $req2->execute(array('categorie' => $categorie));
+                    $result = $req2->fetch();
+                    $categorieId=$result['CategorieId'];
+                }
+        };
+        
+        if(!is_null($eenheid)){
+            $req = $db->prepare('SELECT ve.EenheidId '
+                . 'FROM voorraadEenheid ve '
+                . 'WHERE ve.Eenheid = :eenheid');
+		$req->execute(array('eenheid' => $eenheid));
+                $result = $req->fetch();
+                $eenheidId=$result['EenheidId'];
+                if(is_null($eenheidId)){
+                    $req = $db->prepare('INSERT INTO voorraadEenheid (Eenheid) 
+                    VALUES (:eenheid)');							
+                    $req->execute(array('eenheid' => $eenheid)); 
+                    
+                    $req2 = $db->prepare('SELECT ve.EenheidId '
+                    . 'FROM voorraadEenheid ve '
+                    . 'WHERE ve.Eenheid = :eenheid');
+                    $req2->execute(array('eenheid' => $eenheid));
+                    $result = $req2->fetch();
+                    $eenheidId=$result['EenheidId'];
+                }
+        };
+        
+        if(!is_null($locatie)){
+            $req = $db->prepare('SELECT vl.LocatieId '
+                . 'FROM voorraadLocatie vl '
+                . 'WHERE vl.Locatie = :locatie');
+		$req->execute(array('locatie' => $locatie));
+		$result = $req->fetch();
+                $locatieId=$result['LocatieId'];
+                if(is_null($locatieId)){
+                    $req = $db->prepare('INSERT INTO voorraadLocatie (Locatie) 
+                    VALUES (:locatie)');							
+                    $req->execute(array('locatie' => $locatie)); 
+                    
+                    $req2 = $db->prepare('SELECT vl.LocatieId '
+                    . 'FROM voorraadLocatie vl '
+                    . 'WHERE vl.Locatie = :locatie');
+                    $req2->execute(array('locatie' => $locatie));
+                    $result = $req2->fetch();
+                    $locatieId=$result['LocatieId'];
+                }
+        };
+        
+      if($id != null){ //Id is not null, so we are editing a voorraaditem
         $id = intval($id);
         $req = $db->prepare('UPDATE voorraad 
-				set categorieId=:categorieId,
+				set categorieId=:categorie,
 				product=:product, 
 				hoeveelheid=:hoev, 
-				eenheid=:eenheid, 
-				locatie=:locatie, 
+				eenheidId=:eenheid, 
+				locatieId=:locatie, 
 				datum=:datum
 				where voorraadid=:id');
-      $req->execute(array('id' => $id, 'categorie' => $categorieId, 'product' => $product, 'hoeveelheid' => $hoev, 'eenheid' => $eenheid, 'locatie' => $locatie, 'datum' => $datum));
+          $req->execute(array('id' => intval($id),
+          'categorie' => isset($categorieId) ? intval($categorieId) : null,
+          'product' => $product,
+          'hoev' => isset($hoeveelheid) ? floatval($hoeveelheid) : null,
+          'eenheid' => isset($eenheidId) ? intval($eenheidId) : null,
+          'locatie' => isset($locatieId) ? intval($locatieId) : null,
+          'datum' => $datumchecked));
 
        }
         else { //Id is null, so we are creating a new voorraaditem
-        $req = $db->prepare('INSERT INTO voorraad (GebruikerId, CategorieId, Product, Hoeveelheid, EenheidId, LocatieId, Datum) 
-             VALUES (3, 20, "test4", 1, 20, 20, null)');	
-//        VALUES (:gebruikerId, :categorieId, :product, :hoeveelheid, :eenheid, :locatie, :datum)');							
-        $req->execute(array('gebruikerId' => $gebruikerId, 
-            'categorieId' => $categorieId, 
+        $req = $db->prepare('INSERT INTO voorraad (GebruikerId, CategorieId, Product, Hoeveelheid, EenheidId, LocatieId, Datum) 	
+        VALUES (:gebruikerId, :categorieId, :product, :hoev, :eenheidId, :locatieId, :datum)');							
+        $req->execute(array('gebruikerId' => intval($gebruikerId), 
+            'categorieId' => isset($categorieId) ? intval($categorieId) : null, 
             'product' => $product, 
-            'hoeveelheid' => $hoeveelheid, 
-            'eenheidId' => $eenheidId,
-            'locatieId' => $locatieId, 
-            'datum' => $datum));       
+            'hoev' => isset($hoeveelheid) ? floatval($hoeveelheid) : null, 
+            'eenheidId' => isset($eenheidId) ? intval($eenheidId) : null,
+            'locatieId' => isset($locatieId) ? intval($locatieId) : null,
+            'datum' => $datumchecked));       
         }
         return null;
     }
-    
+ 
  } //end class Voorraad
   
 class VoorraadCategorie{    

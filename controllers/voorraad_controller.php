@@ -13,7 +13,7 @@
     public function save() {
         // we store all the voorraaditems in a variable
         $voorraaditems = Voorraad::save(
-                isset($_GET['id']) ? $_GET['id'] : null,
+                isset($_POST['Id']) ? $_POST['Id'] : null,
                 isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null,
                 isset($_POST['Product']) ? $_POST['Product'] : null,
                 isset($_POST['Categorie']) ? $_POST['Categorie'] : null,
@@ -26,7 +26,8 @@
 	$voorraadeenheden = Voorraad::allEenheden(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	$voorraadlocaties = Voorraad::allLocaties(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	$voorraaditem = Voorraad::find(isset($_GET['id']) ? $_GET['id'] : null);
-        require_once('views/voorraad/index.php');
+//        require_once('views/voorraad/index.php');
+        header('Location: index.php?controller=voorraad&action=index');
     }	
 		
   }

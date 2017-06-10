@@ -24,6 +24,17 @@
 			<li onclick="FilterOnHoeveelheid('UitVoorraad')"><a href="#">Enkel uit voorraad</a></li>
 		</ul>
 	</div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Filter op locatie
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">                  
+                    <?php foreach($voorraadlocaties as $locatie) { ?>
+			<li onclick="FilterOnLocatie('<?php echo $locatie->locatie;?>')"><a href="#"><?php echo $locatie->locatie;?></a></li>
+                    <?php } ?>                                      	
+		</ul>					
+	</div>
   </div>
 </div>
 
@@ -64,9 +75,12 @@
 
 <div class="row" id="VoorraadForm">
 	<div class="col-xs-6 col-md-4">
-		<div class="panel panel-default" style="position: fixed; right: 5%; top:170px">
-			<div class="panel-body"> 
+		<div class="panel panel-default" style="position: fixed; right: 5%; top:170px;">
+			<div class="panel-body" style="padding-top: 0px;; padding-bottom: 0px;"> 
 				<form action="?controller=voorraad&action=save" method="post" id="add_voorraaditem">
+                                    <div class="form-group">
+						<input type="hidden" id="ProductId" name="Id" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->voorraadId;?><?php }?>">
+					</div>
 					<div class="form-group">
 						<label for="Product">Product</label><br>
 						<input type="text" id="Product" name="Product" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->product;?><?php }?>">
@@ -76,7 +90,7 @@
 						<input list="Categorie" class="combobox" name="Categorie" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->categorie;?><?php }?>">	
                                                 <datalist id="Categorie">                                     
 							<?php foreach($voorraadcategories as $categorie) { ?>
-								<option data-value="<?php echo $categorie->categorieId; ?>"><?php echo $categorie->categorie; ?></option>
+								<option><?php echo $categorie->categorie; ?></option>
 							<?php } ?>
                                                                 
 						</datalist>      
@@ -90,7 +104,7 @@
 						<input list="Eenheid" class="combobox" name="Eenheid" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid;?><?php }?>">	
 						<datalist id="Eenheid">
 							<?php foreach($voorraadeenheden as $eenheid) { ?>
-								<option data-value="<?php echo $eenheid->eenheidId; ?>"><?php echo $eenheid->eenheid; ?></option>
+								<option><?php echo $eenheid->eenheid; ?></option>
 							<?php } ?>	
 						</datalist>
 					</div>
@@ -99,7 +113,7 @@
 						<input list="Locatie" class="combobox" name="Locatie" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->locatie;?><?php }?>">	
 						<datalist id="Locatie">
 							<?php foreach($voorraadlocaties as $locatie) { ?>
-								<option data-value="<?php echo $locatie->locatieId; ?>"><?php echo $locatie->locatie; ?></option>
+								<option><?php echo $locatie->locatie; ?></option>
 							<?php } ?>	
 						</datalist>
 					</div>	
@@ -123,7 +137,32 @@
                                             <?php } ?>
                                         </div>      
 				</form>
+                            
+                            <div class="form-group">
+						<label for="Boodschappenlijst">Boodschappenlijst: </label><br>
+						<input list="Boodschappenlijst" class="combobox" name="Boodschappenlijst" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid;?><?php }?>">	
+						<datalist id="Boodschappenlijst">
+							<?php foreach($voorraadeenheden as $eenheid) { ?>
+								<option><?php echo $eenheid->eenheid; ?></option>
+							<?php } ?>	
+						</datalist>
+					</div>   
 			</div>
 		</div>
+            
+<!--            <div class="panel panel-default" style="position: fixed; right: 5%; top:20px">
+			<div class="panel-body"> 
+					<div class="form-group">
+						<label for="Eenheid">Eenheid: </label><br>
+						<input list="Eenheid" class="combobox" name="Eenheid" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid;?><?php }?>">	
+						<datalist id="Eenheid">
+							<?php foreach($voorraadeenheden as $eenheid) { ?>
+								<option><?php echo $eenheid->eenheid; ?></option>
+							<?php } ?>	
+						</datalist>
+					</div>                          
+                        </div>
+            </div>-->
+            
 	</div>
 </div>
