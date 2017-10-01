@@ -8,9 +8,9 @@
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li><a href="#">Categorie</a></li>
-			<li><a href="#">Product</a></li>
-			<li><a href="#">Datum: oudste eerst</a></li>
+			<li onclick="sortTable('Categorie')"><a href="#">Categorie</a></li>
+			<li onclick="sortTable('Product')"><a href="#">Product</a></li>
+			<li onclick="sortTable('Datum')"><a href="#">Datum: oudste eerst</a></li>
 		</ul>
 	</div>   
 	<div class="btn-group">
@@ -29,7 +29,8 @@
 			Filter op locatie
 			<span class="caret"></span>
 		</button>
-		<ul class="dropdown-menu">                  
+		<ul class="dropdown-menu">  
+                    <li onclick="FilterOnLocatie('Alles')"><a href="#">Alles</a></li> 
                     <?php foreach($voorraadlocaties as $locatie) { ?>
 			<li onclick="FilterOnLocatie('<?php echo $locatie->locatie;?>')"><a href="#"><?php echo $locatie->locatie;?></a></li>
                     <?php } ?>                                      	
