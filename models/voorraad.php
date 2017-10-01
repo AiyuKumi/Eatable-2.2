@@ -249,6 +249,20 @@
         return null;
     }
  
+    public static function delete($id, $gebruikerId) {
+      $db = Db::getInstance();
+      // we make sure $id is an integer
+	  if(!is_null($id)){
+		$id = intval($id);
+                $req = $db->prepare('DELETE '
+                . 'FROM voorraad '
+                . 'WHERE VoorraadId = :id AND Gebruikerid = :gebruikerId ');
+		// the query was prepared, now we replace :id with our actual $id value
+		$req->execute(array('id' => intval($id), 'gebruikerId' => intval($gebruikerId)));		
+	  } 
+          return null;
+    }
+    
  } //end class Voorraad
   
 class VoorraadCategorie{    

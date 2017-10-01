@@ -36,7 +36,7 @@
   $controllers = array('pages' => ['home' ,'error'],
                         'login' => ['login' ,'error'],
                         'logout' => ['logout' ,'error'],
-                        'voorraad' => ['index', 'save'],
+                        'voorraad' => ['index', 'save', 'delete'],
 			'recepten' => ['index', 'show']);
 
   // check that the requested controller and action are both allowed

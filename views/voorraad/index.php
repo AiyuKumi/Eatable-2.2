@@ -126,14 +126,12 @@
                                                  <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                                              </button>
                                             <?php if($voorraaditem != null) { ?>
-                                            <button type="button" class="btn btn-danger btn-sm"><!--Verwijderen-->
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                            </button>
+                                            <a onClick="javascript:return confirm('Ben je zeker dat je <?php echo $voorraaditem->product; ?> wilt verwijderen?')" href="?controller=voorraad&action=delete&id=<?php echo $voorraaditem->voorraadId; ?>" class="btn btn-danger btn-sm" role="button"><!--Verwijderen-->
+                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>                                               
+                                            </a>                                            
                                             <a href="?controller=voorraad&action=index" class="btn btn-primary btn-sm" role="button"><!--Annuleren-->
                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>                                               
                                             </a> 
-                                            <!--<a href="?controller=voorraad&action=index" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>-->
-                                            <!--<input type="submit" name="KnopVerwijderen" id="KnopVerwijderen" value="Verwijderen"></br>-->
                                             <?php } ?>
                                         </div>      
 				</form>
