@@ -20,7 +20,7 @@
         require_once('models/voorraad.php');
         $controller = new VoorraadController();
       break;
-	  case 'recept':
+	  case 'recepten':
 		// we need the model to query the database later in the controller
         require_once('models/recepten.php');
         $controller = new ReceptenController();
