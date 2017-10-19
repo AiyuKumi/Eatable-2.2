@@ -11,8 +11,9 @@
     public $LocatieId;
     public $Locatie;
     public $Datum;
+    public $IsVoeding;
     
-    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Categorie, $Product, $Hoeveelheid, $EenheidId, $Eenheid, $LocatieId, $Locatie, $Datum) {
+    public function __construct($voorraadId, $gebruikerid, $CategorieId, $Categorie, $Product, $Hoeveelheid, $EenheidId, $Eenheid, $LocatieId, $Locatie, $Datum, $IsVoeding) {
         $this->voorraadId = $voorraadId;
         $this->gebruikerid  = $gebruikerid;
         $this->categorieId = $CategorieId;
@@ -24,12 +25,13 @@
 	$this->locatieId = $LocatieId;
         $this->locatie = $Locatie;
 	$this->datum = $Datum;
+        $this->isVoeding = $IsVoeding;
     }
 
     public static function all($gebruikerid) {        
         $list = [];
         $db = Db::getInstance();
-        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId ,vl.Locatie, v.Datum '
+        $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId ,vl.Locatie, v.Datum, v.IsVoeding '
                 . 'FROM voorraad v '
                 . 'LEFT JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
                 . 'LEFT JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
@@ -49,7 +51,8 @@
 		$voorraad['Eenheid'],
                 $voorraad['LocatieId'],
 		$voorraad['Locatie'],
-		$voorraad['Datum']);
+		$voorraad['Datum'],
+                $voorraad['IsVoeding']);
         }
         return $list;
     }
@@ -107,7 +110,7 @@
       // we make sure $id is an integer
 	  if(!is_null($id)){
 		$id = intval($id);
-                $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId, vl.Locatie, v.Datum '
+                $req = $db->prepare('SELECT v.VoorraadId ,v.GebruikerId, vc.CategorieId, vc.Categorie, v.Product, v.Hoeveelheid, ve.EenheidId, ve.Eenheid, vl.LocatieId, vl.Locatie, v.Datum, v.IsVoeding '
                 . 'FROM voorraad v '
                 . 'LEFT JOIN voorraadCategorie vc ON v.CategorieId = vc.CategorieId '
                 . 'LEFT JOIN voorraadLocatie vl ON v.LocatieId = vl.LocatieId '
@@ -126,11 +129,12 @@
 			$voorraad['Eenheid'],
 			$voorraad['LocatieId'],
                         $voorraad['Locatie'],
-			$voorraad['Datum']);
+			$voorraad['Datum'],
+                        $voorraad['IsVoeding']);
 	  } else return null;
     }
 	
-    public static function save($id, $gebruikerId, $product, $categorie, $hoev, $eenheid, $locatie, $datum) {
+    public static function save($id, $gebruikerId, $product, $categorie, $hoev, $eenheid, $locatie, $datum, $isVoeding) {
       $db = Db::getInstance();
       
       if($datum === null){
@@ -224,7 +228,8 @@
 				hoeveelheid=:hoev, 
 				eenheidId=:eenheid, 
 				locatieId=:locatie, 
-				datum=:datum
+				datum=:datum,
+                                isVoeding=:isVoeding,
 				where voorraadid=:id');
           $req->execute(array('id' => intval($id),
           'categorie' => isset($categorieId) ? intval($categorieId) : null,
@@ -232,19 +237,21 @@
           'hoev' => isset($hoeveelheid) ? floatval($hoeveelheid) : null,
           'eenheid' => isset($eenheidId) ? intval($eenheidId) : null,
           'locatie' => isset($locatieId) ? intval($locatieId) : null,
-          'datum' => $datumchecked));
+          'datum' => $datumchecked,
+          'isVoeding' => isset($isVoeding) ? intval($isVoeding) : 0));
 
        }
         else { //Id is null, so we are creating a new voorraaditem
-        $req = $db->prepare('INSERT INTO voorraad (GebruikerId, CategorieId, Product, Hoeveelheid, EenheidId, LocatieId, Datum) 	
-        VALUES (:gebruikerId, :categorieId, :product, :hoev, :eenheidId, :locatieId, :datum)');							
+        $req = $db->prepare('INSERT INTO voorraad (GebruikerId, CategorieId, Product, Hoeveelheid, EenheidId, LocatieId, Datum, IsVoeding) 	
+        VALUES (:gebruikerId, :categorieId, :product, :hoev, :eenheidId, :locatieId, :datum, :isVoeding)');							
         $req->execute(array('gebruikerId' => intval($gebruikerId), 
             'categorieId' => isset($categorieId) ? intval($categorieId) : null, 
             'product' => $product, 
             'hoev' => isset($hoeveelheid) ? floatval($hoeveelheid) : null, 
             'eenheidId' => isset($eenheidId) ? intval($eenheidId) : null,
             'locatieId' => isset($locatieId) ? intval($locatieId) : null,
-            'datum' => $datumchecked));       
+            'datum' => $datumchecked,
+            'isVoeding' => isset($isVoeding) ? intval($isVoeding) : 0));       
         }
         return null;
     }

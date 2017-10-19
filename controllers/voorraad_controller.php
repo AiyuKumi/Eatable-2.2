@@ -20,7 +20,8 @@
                 isset($_POST['Hoeveelheid']) ? $_POST['Hoeveelheid'] : null,
                 isset($_POST['Eenheid']) ? $_POST['Eenheid'] : null,
                 isset($_POST['Locatie']) ? $_POST['Locatie'] : null,
-                isset($_POST['Datum']) ? $_POST['Datum'] : null);
+                isset($_POST['Datum']) ? $_POST['Datum'] : null,
+                isset($_POST['IsVoeding']) ? $_POST['IsVoeding'] : null);
         header('Location: index.php?controller=voorraad&action=index');
     }	
     

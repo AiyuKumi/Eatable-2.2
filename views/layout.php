@@ -138,6 +138,47 @@ function sortTable(column) {
     }
   }
 }
+
+function FilterOnVoeding(filter) {
+  // Declare variables 
+  var table, tr, td, i;
+  table = document.getElementById("VoorraadTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[6];
+    if (td) {
+        if(filter === 'Voeding'){
+            if (Number(td.innerHTML) === 1) {
+                tr[i].style.display = "";                
+            } else {
+                tr[i].style.display = "none";
+            }
+        } 
+        if(filter === 'Niet-Voeding'){
+            if (Number(td.innerHTML) === 0) {
+                tr[i].style.display = "";              
+            } else {
+                tr[i].style.display = "none";
+            } 
+        }
+        if(filter === 'Alles'){
+            tr[i].style.display = "";
+        }
+    } 
+  }
+}
+
+function printDiv() {
+    var divToPrint = document.getElementById('VoorraadTable');
+    newWin = window.open("");
+    newWin.document.write("<style type=\"text/css\">#dontShowOnPrint{ display:none; }</style>");
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.print();
+    newWin.close();
+}
+
 </script>
 
 	</head>

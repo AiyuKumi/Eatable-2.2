@@ -15,7 +15,7 @@
 	</div>   
 	<div class="btn-group">
             <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Filter op voorraad
+			Filter op hoeveelheid
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
@@ -36,6 +36,20 @@
                     <?php } ?>                                      	
 		</ul>					
 	</div>
+      <div class="btn-group">
+            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Filter op voeding
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li onclick="FilterOnVoeding('Voeding')"><a href="#">Voeding</a></li>                       
+			<li onclick="FilterOnVoeding('Niet-Voeding')"><a href="#">Niet-Voeding</a></li>
+			<li onclick="FilterOnVoeding('Alles')"><a href="#">Alles</a></li>
+		</ul>					
+	</div>
+        <a onClick="printDiv()" class="btn btn-primary btn-sm pull-right" role="button">
+            <span class="glyphicon glyphicon-print" aria-hidden="true"></span>                                               
+        </a>  
   </div>
 </div>
 
@@ -52,7 +66,8 @@
 					<th>Eenheid</th>
 					<th>Locatie</th>
 					<th>Datum</th>
-					<th> </th>
+                                        <th style="display:none;">IsVoeding</th>
+					<th id='dontShowOnPrint'> </th>
 					</tr>
 				<?php foreach($voorraaditems as $voorraad) { ?>
 				<tr>
@@ -62,10 +77,10 @@
 					<td><?php echo $voorraad->eenheid; ?></td>
 					<td><?php echo $voorraad->locatie; ?></td>
 					<td><?php echo $voorraad->datum; ?></td>
-                                        <td><button type="button" class="btn btn-default btn-sm"><!--Winkelkar-->
+                                        <td style="display:none;"><?php echo $voorraad->isVoeding; ?></td>
+                                        <td id='dontShowOnPrint'><button type="button" class="btn btn-default btn-sm"><!--Winkelkar-->
                                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                                        </button></td>
-					<!--<td><a onClick=\"javascript:return confirm('Ben je zeker dat je <?php echo $voorraad->product; ?> wilt verwijderen?')\" href=../php/product_delete.php?id=" . $row["voorraadId"]. "><img src=../img/delete_icon.png></a> </td>-->
+                                        </button></td>					
 				</tr>
 				<?php } ?>	
 	</table>
@@ -92,8 +107,7 @@
                                                 <datalist id="Categorie">                                     
 							<?php foreach($voorraadcategories as $categorie) { ?>
 								<option><?php echo $categorie->categorie; ?></option>
-							<?php } ?>
-                                                                
+							<?php } ?>                                                                
 						</datalist>      
 					</div>										
 					<div class="form-group">
@@ -122,6 +136,10 @@
 						<label for="Datum">Datum</label><br>
 						<input type="date" name="Datum" id="Datum" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->datum;?><?php }?>">
 					</div>
+                                        <div class="form-group">
+                                            <label for="IsVoeding" style="margin-right: 5px">Is Voeding</label>
+						<input type="checkbox" name="IsVoeding" id="IsVoeding" value="1" checked <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->isVoeding;?><?php }?>">
+					</div>
                                         <div >                                            
                                              <button type="submit" class="btn btn-success btn-sm" ><!--Opslaan-->
                                                  <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
@@ -147,21 +165,6 @@
 						</datalist>
 					</div>   
 			</div>
-		</div>
-            
-<!--            <div class="panel panel-default" style="position: fixed; right: 5%; top:20px">
-			<div class="panel-body"> 
-					<div class="form-group">
-						<label for="Eenheid">Eenheid: </label><br>
-						<input list="Eenheid" class="combobox" name="Eenheid" <?php if($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid;?><?php }?>">	
-						<datalist id="Eenheid">
-							<?php foreach($voorraadeenheden as $eenheid) { ?>
-								<option><?php echo $eenheid->eenheid; ?></option>
-							<?php } ?>	
-						</datalist>
-					</div>                          
-                        </div>
-            </div>-->
-            
+		</div>                        
 	</div>
 </div>
