@@ -1,0 +1,18 @@
+SELECT * 
+FROM voorraadCategorie vc 
+WHERE vc.Categorie = 'Eigen Bereidingen'
+
+
+SELECT * 
+FROM voorraadCategorie vc 
+inner join voorraad v on v.categorieid = vc.categorieId
+WHERE vc.Categorie = 'Eigen Bereidingen'
+AND v.GebruikerId = 3
+
+
+
+SELECT distinct(vc.categorieId)
+FROM voorraadCategorie vc 
+inner join voorraad v on v.categorieid = vc.categorieId
+WHERE vc.Categorie = 'Eigen Bereidingen'
+AND v.GebruikerId = 3

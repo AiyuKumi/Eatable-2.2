@@ -35,65 +35,98 @@
             </script>--> 
 
             <script>
-                function FilterOnHoeveelheid(filter) {
-                    // Declare variables 
-                    var table, tr, td, i;
-                    table = document.getElementById("VoorraadTable");
-                    tr = table.getElementsByTagName("tr");
-
-                    // Loop through all table rows, and hide those who don't match the search query
-                    for (i = 0; i < tr.length; i++) {
-                        td = tr[i].getElementsByTagName("td")[2];
-                        if (td) {
-                            if (filter === 'Alles') {
-                                if (Number(td.innerHTML) >= 0) {
-                                    tr[i].style.display = "";
-                                } else {
-                                    tr[i].style.display = "none";
-                                }
-                            }
-                            if (filter === 'InVoorraad') {
-                                if (Number(td.innerHTML) > 0) {
-                                    tr[i].style.display = "";
-                                } else {
-                                    tr[i].style.display = "none";
-                                }
-                            }
-                            if (filter === 'UitVoorraad') {
-                                if (Number(td.innerHTML) === 0) {
-                                    tr[i].style.display = "";
-                                } else {
-                                    tr[i].style.display = "none";
-                                }
-                            }
-                        }
-                    }
+                function setCookies(){
+                    var hoev = $("#hoeveelheidList").val();
+                    setCookie("filterHoeveelheid", hoev, 1);
+                    
+                    var loc = $("#locatieList").val();
+                    setCookie("filterLocatie", loc, 1);
+                    
+                    var voed = $("#voedingList").val();
+                    setCookie("filterVoeding", voed, 1);
+                    
+                    var sort = $("#sortList").val();
+                    setCookie("sortColumn", sort, 1);
+                    
+                    FilterAndSort();                 
                 }
-
-                function FilterOnLocatie(filter) {
+                
+                function setCookie(cname, cvalue, exdays) {
+                    var d = new Date();
+                    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                    var expires = "expires="+d.toUTCString();
+                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                }
+                
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                           c = c.substring(1);
+                        }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                     }
+                    return "";
+                }
+                
+                function FilterAndSort()
+                {
                     // Declare variables 
-                    var table, tr, td, i;
-                    table = document.getElementById("VoorraadTable");
-                    tr = table.getElementsByTagName("tr");
-
-                    // Loop through all table rows, and hide those who don't match the search query
-                    for (i = 0; i < tr.length; i++) {
-                        td = tr[i].getElementsByTagName("td")[4];
-                        if (td) {
-
-                            if (td.innerHTML === filter.toString()) {
-                                tr[i].style.display = "";
+                    var table, rows, row, columnHoeveelheid, i, toFilterHoev, toFilterVoed;
+                    table = document.getElementById("VoorraadTable");                   
+                    rows = table.getElementsByTagName("tr");
+                    
+                    var filterHoeveelheid = getCookie("filterHoeveelheid");
+                    var filterLocatie = getCookie("filterLocatie");
+                    var sort = getCookie("sortColumn");
+                    var filterVoeding = getCookie("filterVoeding");
+                                      
+                            if(filterHoeveelheid === "Enkel in voorraad" || filterHoeveelheid === "Alles" )
+                            {
+                                toFilterHoev = 1;
                             } else {
-                                tr[i].style.display = "none";
-                            }
-                            if (filter === 'Alles') {
-                                tr[i].style.display = "";
-                            }
-                        }
-                    }
-                }
+                                   toFilterHoev = 0;
+                                }
+                                
+                                if(filterVoeding === "Voeding" || filterVoeding === "Alles" )
+                            {
+                                toFilterVoed = 1;
+                            } else {
+                                    toFilterVoed = 0;
+                                }
+                                
+                    var toFilterLocatie = filterLocatie;
 
+                    // Loop through all table rows, and hide those who don't match the search query
+                    for (i = 1; i < rows.length; i++) {
+                        row = rows[i];
+                                            
+                        if (row) {
+                            var columnHoeveelheid = row.getElementsByTagName("td")[2];
+                            var columnLocatie = row.getElementsByTagName("td")[4];
+                            var columnVoeding = row.getElementsByTagName("td")[6];
+                            
+                            if ((columnLocatie.innerHTML === toFilterLocatie.toString() || toFilterLocatie.toString() === 'Alles')
+                                    && (columnVoeding.innerHTML === toFilterVoed.toString())
+                                    && ((Number(columnHoeveelheid.innerHTML) > 0 && toFilterHoev === 1) || (toFilterHoev === 0 && Number(columnHoeveelheid.innerHTML) === 0) )
+                                    )
+                            {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = "none";
+                            }                           
+                        }                       
+                    }
+                    
+                    sortTable(sort);
+                }
+                      
                 function sortTable(column) {
+                
                     var table, rows, switching, i, x, y, shouldSwitch;
                     table = document.getElementById("VoorraadTable");
                     switching = true;
@@ -137,38 +170,7 @@
                             switching = true;
                         }
                     }
-                }
-
-                function FilterOnVoeding(filter) {
-                    // Declare variables 
-                    var table, tr, td, i;
-                    table = document.getElementById("VoorraadTable");
-                    tr = table.getElementsByTagName("tr");
-
-                    // Loop through all table rows, and hide those who don't match the search query
-                    for (i = 0; i < tr.length; i++) {
-                        td = tr[i].getElementsByTagName("td")[6];
-                        if (td) {
-                            if (filter === 'Voeding') {
-                                if (Number(td.innerHTML) === 1) {
-                                    tr[i].style.display = "";
-                                } else {
-                                    tr[i].style.display = "none";
-                                }
-                            }
-                            if (filter === 'Niet-Voeding') {
-                                if (Number(td.innerHTML) === 0) {
-                                    tr[i].style.display = "";
-                                } else {
-                                    tr[i].style.display = "none";
-                                }
-                            }
-                            if (filter === 'Alles') {
-                                tr[i].style.display = "";
-                            }
-                        }
-                    }
-                }
+                }              
 
                 function printDiv() {
                     var divToPrint = document.getElementById('VoorraadTable');
@@ -244,5 +246,6 @@
             </script>-->
             <script src="js/maintainscroll.jquery.js" type="text/javascript"></script>
             <script src="js/datalist.js" type="text/javascript"></script>
+            <!--<script src="js/bootstrap-select.js" type="text/javascript"></script>-->
         <body>
         <html>

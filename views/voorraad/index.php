@@ -2,52 +2,54 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="btn-group">       
-            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                Sorteer op
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li onclick="sortTable('Categorie')"><a href="#">Categorie</a></li>
-                <li onclick="sortTable('Product')"><a href="#">Product</a></li>
-                <li onclick="sortTable('Datum')"><a href="#">Datum: oudste eerst</a></li>
-            </ul>
-        </div>   
-        <div class="btn-group">
-            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Filter op hoeveelheid
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li onclick="FilterOnHoeveelheid('Alles')"><a href="#">Alles</a></li>                       
-                <li onclick="FilterOnHoeveelheid('InVoorraad')"><a href="#">Enkel in voorraad</a></li>
-                <li onclick="FilterOnHoeveelheid('UitVoorraad')"><a href="#">Enkel uit voorraad</a></li>
-            </ul>
+        <div class="btn-group" style="width: 170px;">    
+            <label>Sorteer op</label><br>
+           <select class="selectpicker" id="sortList" data-style="btn-success" style="width: 160px;">
+            <option>Categorie</option>
+            <option>Product</option>
+            <option>Datum: oudste eerst</option>
+        </select>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Filter op locatie
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">  
-                <li onclick="FilterOnLocatie('Alles')"><a href="#">Alles</a></li> 
-                <?php foreach ($voorraadlocaties as $locatie) { ?>
-                    <li onclick="FilterOnLocatie('<?php echo $locatie->locatie; ?>')"><a href="#"><?php echo $locatie->locatie; ?></a></li>
-                <?php } ?>                                      	
-            </ul>					
+        <div class="btn-group" style="width: 170px;"> 
+        <label>Filter op voorraad</label><br>
+        <select class="selectpicker" id="hoeveelheidList" data-style="btn-success" style="width: 160px;">
+            <option>Alles</option>
+            <option>Enkel in voorraad</option>
+            <option>Enkel uit voorraad</option>
+        </select>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Filter op voeding
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li onclick="FilterOnVoeding('Voeding')"><a href="#">Voeding</a></li>                       
-                <li onclick="FilterOnVoeding('Niet-Voeding')"><a href="#">Niet-Voeding</a></li>
-                <li onclick="FilterOnVoeding('Alles')"><a href="#">Alles</a></li>
-            </ul>					
+        <div class="btn-group" style="width: 170px;"> 
+        <label>Filter op locatie</label><br>
+        <select class="selectpicker" id="locatieList" data-style="btn-success" style="width: 160px;">
+            <option>Alles</option>
+            <?php foreach ($voorraadlocaties as $locatie) { ?>
+                    <option><?php echo $locatie->locatie; ?></option>
+                <?php } ?>  
+        </select>
         </div>
-        <a onClick="printDiv()" class="btn btn-primary btn-sm pull-right" role="button">
+        <div class="btn-group" style="width: 170px;"> 
+        <label>Filter op afdeling</label><br>
+        <select class="selectpicker" id="voedingList" data-style="btn-success" style="width: 160px;">
+            <option>Voeding</option>                       
+            <option>Niet-Voeding</option>
+            <option>Alles</option>
+        </select>
+        </div>
+        <a onClick="setCookies();return false;" href="#" class="btn btn-primary btn-sm" role="button">
+            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>                                               
+        </a>     
+        
+        <div class="btn-group" style="width: 170px; margin-left:30px;"> 
+                    <label for="Boodschappenlijst">Boodschappenlijst: </label><br>
+                    <input list="Boodschappenlijst" class="combobox" name="Boodschappenlijst" <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid; ?><?php } ?>">	
+                    <datalist id="Boodschappenlijst">
+                        <?php foreach ($voorraadeenheden as $eenheid) { ?>
+                            <option><?php echo $eenheid->eenheid; ?></option>
+                        <?php } ?>	
+                    </datalist>
+                </div>         
+        
+        <a onClick="printDiv();return false;" href="#" class="btn btn-primary btn-sm pull-right" role="button">
             <span class="glyphicon glyphicon-print" aria-hidden="true"></span>                                               
         </a>  
     </div>
@@ -67,6 +69,7 @@
                 <th>Locatie</th>
                 <th>Datum</th>
                 <th style="display:none;">IsVoeding</th>
+                <th></th>
                 <th id='dontShowOnPrint'> </th>
             </tr>
             <?php foreach ($voorraaditems as $voorraad) { ?>
@@ -80,9 +83,13 @@
                     <td><?php echo $voorraad->locatie; ?></td>
                     <td><?php echo $voorraad->datum; ?></td>
                     <td style="display:none;"><?php echo $voorraad->isVoeding; ?></td>
+                    <td>
+                        <!--<?php foreach ($voorraadrecept as $recept) { if (in_array($voorraad->product, $recept->product)) { ?>
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>//<?php  }} ?>      -->                 
+                    </td>
                     <td id='dontShowOnPrint'><button type="button" class="btn btn-default btn-sm"><!--Winkelkar-->
-                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                        </button></td>					
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                    </button></td>					
                 </tr>
 <?php } ?>	
         </table>
@@ -139,7 +146,7 @@
                         <input type="date" name="Datum" id="Datum" <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->datum; ?><?php } ?>">
                     </div>
                     <div class="form-group">
-                        <label for="IsVoeding" style="margin-right: 5px">Is Voeding</label>
+                        <label for="IsVoeding" style="margin-right: 5px">Voeding</label>
                         <input type="checkbox" name="IsVoeding" id="IsVoeding" value="1" checked <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->isVoeding; ?><?php } ?>">
                     </div>
                     <div >                                            
@@ -157,15 +164,7 @@
                     </div>      
                 </form>
 
-                <div class="form-group">
-                    <label for="Boodschappenlijst">Boodschappenlijst: </label><br>
-                    <input list="Boodschappenlijst" class="combobox" name="Boodschappenlijst" <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->eenheid; ?><?php } ?>">	
-                    <datalist id="Boodschappenlijst">
-                        <?php foreach ($voorraadeenheden as $eenheid) { ?>
-                            <option><?php echo $eenheid->eenheid; ?></option>
-<?php } ?>	
-                    </datalist>
-                </div>   
+               
             </div>
         </div>                        
     </div>

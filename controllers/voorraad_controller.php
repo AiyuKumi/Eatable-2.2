@@ -6,6 +6,7 @@
 	$voorraadcategories = Voorraad::allCategories(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	$voorraadeenheden = Voorraad::allEenheden(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	$voorraadlocaties = Voorraad::allLocaties(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
+  //      $voorraadrecept = Voorraad::recept(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null);
 	$voorraaditem = Voorraad::find(isset($_GET['id']) ? $_GET['id'] : null);
         require_once('views/voorraad/index.php');
     }

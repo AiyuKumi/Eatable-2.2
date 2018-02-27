@@ -45,16 +45,33 @@ class Voorraad {
         foreach ($req->fetchAll() as $voorraad) {
             $list[] = new Voorraad($voorraad['VoorraadId'], $voorraad['GebruikerId'], $voorraad['CategorieId'], $voorraad['Categorie'], $voorraad['Product'], $voorraad['Hoeveelheid'], $voorraad['EenheidId'], $voorraad['Eenheid'], $voorraad['LocatieId'], $voorraad['Locatie'], $voorraad['Datum'], $voorraad['IsVoeding']);
         }
+              
         return $list;
     }
+    
+     public static function recept($gebruikerid) {
+        $list = [];
+//        $db = Db::getInstance();
+//        $req = $db->prepare('SELECT r.ReceptId ,r.GebruikerId, r.Titel, ri.IngredientId, ri.Hoeveelheid, ri.Eenheid, ri.Extra, ri.Product '
+//                . 'FROM recept r '
+//                . 'LEFT JOIN receptIngredient ri ON r.receptId = ri.receptId '
+//                . 'WHERE r.gebruikerid = :gebruikerid ');
+//        $req->execute(array('gebruikerid' => $gebruikerid));
+//        // we create a list of Voorraad objects from the database results
+//        foreach ($req->fetchAll() as $recept) {
+//            $list[] = new Recept($recept['ReceptId'], $recept['GebruikerId'], $recept['Titel'], $recept['IngredientId'], $recept['Hoeveelheid'], $recept['Eenheid'], $recept['Extra'], $recept['Product']);
+//        }
+//        return $list;
+//    }
+           return $list;    
+     }
 
     public static function allCategories($gebruikerid) {
         $list = [];
         $db = Db::getInstance();
         $req = $db->prepare('SELECT DISTINCT vc.CategorieId, vc.Categorie '
                 . 'FROM voorraadCategorie vc '
-                . 'INNER JOIN voorraad v ON v.CategorieId = vc.CategorieId '
-                . 'WHERE v.gebruikerid = :gebruikerid');
+                . 'WHERE vc.gebruikerid = :gebruikerid');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $voorraadcatgorie) {
@@ -68,8 +85,7 @@ class Voorraad {
         $db = Db::getInstance();
         $req = $db->prepare('SELECT DISTINCT ve.EenheidId, ve.Eenheid '
                 . 'FROM voorraadEenheid ve '
-                . 'INNER JOIN voorraad v ON v.EenheidId = ve.EenheidId '
-                . 'WHERE v.gebruikerid = :gebruikerid');
+                . 'WHERE ve.gebruikerid = :gebruikerid');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $voorraadeenheden) {
@@ -83,8 +99,7 @@ class Voorraad {
         $db = Db::getInstance();
         $req = $db->prepare('SELECT DISTINCT vl.LocatieId, vl.Locatie '
                 . 'FROM voorraadLocatie vl '
-                . 'INNER JOIN voorraad v ON v.LocatieId = vl.LocatieId '
-                . 'WHERE v.gebruikerid = :gebruikerid');
+                . 'WHERE vl.gebruikerid = :gebruikerid');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $voorraadlocaties) {
@@ -138,19 +153,21 @@ class Voorraad {
         if (!is_null($categorie)) {
             $req = $db->prepare('SELECT vc.CategorieId '
                     . 'FROM voorraadCategorie vc '
-                    . 'WHERE vc.Categorie = :categorie');
-            $req->execute(array('categorie' => $categorie));
+                    . 'WHERE vc.gebruikerid = :gebruikerId '
+                    . 'AND vc.Categorie = :categorie');
+            $req->execute(array('categorie' => $categorie, 'gebruikerId' => intval($gebruikerId)));
             $result = $req->fetch();
             $categorieId = $result['CategorieId'];
             if (is_null($categorieId)) {
-                $req = $db->prepare('INSERT INTO voorraadCategorie (Categorie) 
-                    VALUES (:categorie)');
-                $req->execute(array('categorie' => $categorie));
+                $req = $db->prepare('INSERT INTO voorraadCategorie (Categorie, GebruikerId) 
+                    VALUES (:categorie, :gebruikerId)');
+                $req->execute(array('categorie' => $categorie, 'gebruikerId' => intval($gebruikerId)));
 
                 $req2 = $db->prepare('SELECT vc.CategorieId '
                         . 'FROM voorraadCategorie vc '
-                        . 'WHERE vc.Categorie = :categorie');
-                $req2->execute(array('categorie' => $categorie));
+                        . 'WHERE vc.gebruikerid = :gebruikerId '
+                        . 'AND vc.Categorie = :categorie');
+                $req2->execute(array('categorie' => $categorie, 'gebruikerId' => intval($gebruikerId)));
                 $result = $req2->fetch();
                 $categorieId = $result['CategorieId'];
             }
@@ -159,19 +176,21 @@ class Voorraad {
         if (!is_null($eenheid)) {
             $req = $db->prepare('SELECT ve.EenheidId '
                     . 'FROM voorraadEenheid ve '
-                    . 'WHERE ve.Eenheid = :eenheid');
-            $req->execute(array('eenheid' => $eenheid));
+                    . 'WHERE ve.gebruikerid = :gebruikerId '
+                    . 'AND ve.Eenheid = :eenheid');
+            $req->execute(array('eenheid' => $eenheid, 'gebruikerId' => intval($gebruikerId)));
             $result = $req->fetch();
             $eenheidId = $result['EenheidId'];
             if (is_null($eenheidId)) {
-                $req = $db->prepare('INSERT INTO voorraadEenheid (Eenheid) 
-                    VALUES (:eenheid)');
-                $req->execute(array('eenheid' => $eenheid));
+                $req = $db->prepare('INSERT INTO voorraadEenheid (Eenheid, GebruikerId) 
+                    VALUES (:eenheid, :gebruikerId)');
+                $req->execute(array('eenheid' => $eenheid, 'gebruikerId' => intval($gebruikerId)));
 
                 $req2 = $db->prepare('SELECT ve.EenheidId '
                         . 'FROM voorraadEenheid ve '
-                        . 'WHERE ve.Eenheid = :eenheid');
-                $req2->execute(array('eenheid' => $eenheid));
+                        . 'WHERE ve.gebruikerid = :gebruikerId '
+                        . 'AND ve.Eenheid = :eenheid');
+                $req2->execute(array('eenheid' => $eenheid, 'gebruikerId' => intval($gebruikerId)));
                 $result = $req2->fetch();
                 $eenheidId = $result['EenheidId'];
             }
@@ -180,19 +199,21 @@ class Voorraad {
         if (!is_null($locatie)) {
             $req = $db->prepare('SELECT vl.LocatieId '
                     . 'FROM voorraadLocatie vl '
-                    . 'WHERE vl.Locatie = :locatie');
-            $req->execute(array('locatie' => $locatie));
+                    . 'WHERE vl.gebruikerid = :gebruikerId '
+                    . 'AND vl.Locatie = :locatie');
+            $req->execute(array('locatie' => $locatie, 'gebruikerId' => intval($gebruikerId)));
             $result = $req->fetch();
             $locatieId = $result['LocatieId'];
-            if (is_null($locatieId)) {
-                $req = $db->prepare('INSERT INTO voorraadLocatie (Locatie) 
-                    VALUES (:locatie)');
-                $req->execute(array('locatie' => $locatie));
+        if (is_null($locatieId)) {
+                $req = $db->prepare('INSERT INTO voorraadLocatie (Locatie, GebruikerId) 
+                    VALUES (:locatie, :gebruikerId)');
+                $req->execute(array('locatie' => $locatie, 'gebruikerId' => intval($gebruikerId)));
 
                 $req2 = $db->prepare('SELECT vl.LocatieId '
                         . 'FROM voorraadLocatie vl '
-                        . 'WHERE vl.Locatie = :locatie');
-                $req2->execute(array('locatie' => $locatie));
+                        . 'WHERE vl.gebruikerid = :gebruikerId '  
+                        . 'AND vl.Locatie = :locatie');
+                $req2->execute(array('locatie' => $locatie, 'gebruikerId' => intval($gebruikerId)));
                 $result = $req2->fetch();
                 $locatieId = $result['LocatieId'];
             }
@@ -207,7 +228,7 @@ class Voorraad {
 				eenheidId=:eenheid, 
 				locatieId=:locatie, 
 				datum=:datum,
-                                isVoeding=:isVoeding,
+                                isVoeding=:isVoeding 
 				where voorraadid=:id');
             $req->execute(array('id' => intval($id),
                 'categorie' => isset($categorieId) ? intval($categorieId) : null,
@@ -219,7 +240,7 @@ class Voorraad {
                 'isVoeding' => isset($isVoeding) ? intval($isVoeding) : 0));
         } else { //Id is null, so we are creating a new voorraaditem
             $req = $db->prepare('INSERT INTO voorraad (GebruikerId, CategorieId, Product, Hoeveelheid, EenheidId, LocatieId, Datum, IsVoeding) 	
-        VALUES (:gebruikerId, :categorieId, :product, :hoev, :eenheidId, :locatieId, :datum, :isVoeding)');
+            VALUES (:gebruikerId, :categorieId, :product, :hoev, :eenheidId, :locatieId, :datum, :isVoeding)');
             $req->execute(array('gebruikerId' => intval($gebruikerId),
                 'categorieId' => isset($categorieId) ? intval($categorieId) : null,
                 'product' => $product,
@@ -282,6 +303,30 @@ class VoorraadEenheid {
     public function __construct($EenheidId, $Eenheid) {
         $this->eenheidId = $EenheidId;
         $this->eenheid = $Eenheid;
+    }
+
+}
+
+class Recept {
+
+    public $receptId;
+    public $gebruikerId;
+    public $titel;
+    public $ingredientid;
+    public $hoeveelheid;
+    public $eenheid;
+    public $extra;
+    public $product;
+
+    public function __construct($receptId, $gebruikerId, $titel, $ingredientid, $hoeveelheid, $eenheid, $extra, $product) {
+        $this->receptId = $receptId;
+        $this->gebruikerId = $gebruikerId;
+        $this->titel = $titel;
+        $this->ingredientid = $ingredientid;
+        $this->hoeveelheid = $hoeveelheid;
+        $this->eenheid = $eenheid;
+        $this->extra = $extra;
+        $this->product = $product;
     }
 
 }

@@ -29,7 +29,8 @@ class Recept {
         $db = Db::getInstance();
         $req = $db->prepare('SELECT r.ReceptId ,r.GebruikerId, r.Titel, r.Bereidingstijd, r.AantalPersonen, r.Bereiding, r.Opmerking, r.Bron, r.Afbeelding '
                 . 'FROM recept r '
-                . 'WHERE r.gebruikerid = :gebruikerid ');
+                . 'WHERE r.gebruikerid = :gebruikerid '
+                . 'ORDER BY r.Titel');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $recept) {
