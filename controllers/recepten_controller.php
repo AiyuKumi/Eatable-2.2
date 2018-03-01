@@ -15,7 +15,12 @@ class ReceptenController {
             return call('recepten', 'error');
 
         // we use the given id to get the right post
-        $recepten = recept::find($_GET['id']);
+        $recept = recept::findRecept(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null,
+                $_GET['id']);
+        $categories = recept::findCategories(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null,
+                $_GET['id']);
+        $ingredienten = recept::findIngredienten(isset($_COOKIE['UserId']) ? $_COOKIE['UserId'] : null,
+                $_GET['id']);
         require_once('views/recepten/show.php');
     }
 

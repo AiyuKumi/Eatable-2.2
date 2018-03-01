@@ -112,7 +112,7 @@
                             
                             if ((columnLocatie.innerHTML === toFilterLocatie.toString() || toFilterLocatie.toString() === 'Alles')
                                     && (columnVoeding.innerHTML === toFilterVoed.toString())
-                                    && ((Number(columnHoeveelheid.innerHTML) > 0 && toFilterHoev === 1) || (toFilterHoev === 0 && Number(columnHoeveelheid.innerHTML) === 0) )
+                                    && ((Number(columnHoeveelheid.innerHTML) > 0 && toFilterHoev === 1) || (filterHoeveelheid === "Alles") || (toFilterHoev === 0 && Number(columnHoeveelheid.innerHTML) === 0) )
                                     )
                             {
                                 row.style.display = "";
@@ -126,7 +126,6 @@
                 }
                       
                 function sortTable(column) {
-                
                     var table, rows, switching, i, x, y, shouldSwitch;
                     table = document.getElementById("VoorraadTable");
                     switching = true;
@@ -151,9 +150,9 @@
                                 x = rows[i].getElementsByTagName("TD")[0];
                                 y = rows[i + 1].getElementsByTagName("TD")[0];
                             }
-                            if (column === 'Datum') {
-                                x = rows[i].getElementsByTagName("TD")[5];
-                                y = rows[i + 1].getElementsByTagName("TD")[5];
+                            if (column === 'Datum: oudste eerst') {
+                                x = rows[i].getElementsByTagName("TD")[5];                               
+                                y = rows[i + 1].getElementsByTagName("TD")[5];                          
                             }
 
                             //check if the two rows should switch place:
@@ -182,7 +181,7 @@
                 }
 
             </script>
-
+          
         </head>
         <body>
             <nav class="navbar navbar-inverse">
@@ -229,9 +228,9 @@
 
 <?php require_once('routes.php'); ?>
 
-            <footer>
+<!--            <footer>
                 Copyright
-            </footer>
+            </footer>-->
 
             <script src="js/jquery-1.12.3.min.js" type="text/javascript"></script>
             <script src="js/bootstrap.min.js" type="text/javascript"></script>
