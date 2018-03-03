@@ -121,7 +121,8 @@
                     </div>										
                     <div class="form-group">
                         <label for="Hoeveelheid">Hoeveelheid</label><br>
-                        <input type=number id="Hoeveelheid" name="Hoeveelheid" min="0" step="0.05" <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->hoeveelheid; ?><?php } ?>">
+                        <input type=number id="Hoeveelheid" name="Hoeveelheid" min="0" step="0.05" 
+                            <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->hoeveelheid; ?><?php } ?>" onChange="resetValues(this.value);">
                     </div>
                     <div class="form-group">
                         <label for="Eenheid">Eenheid: </label><br>
@@ -134,7 +135,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Locatie">Locatie: </label><br>
-                        <input list="Locatie" class="combobox" name="Locatie" <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->locatie; ?><?php } ?>">	
+                        <input list="Locatie" class="combobox" name="Locatie" id="LocatieId" <?php if ($voorraaditem != null) { ?> value="<?php echo $voorraaditem->locatie; ?><?php } ?>">	
                         <datalist id="Locatie">
                             <?php foreach ($voorraadlocaties as $locatie) { ?>
                                 <option><?php echo $locatie->locatie; ?></option>

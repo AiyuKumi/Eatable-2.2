@@ -179,7 +179,15 @@
                     newWin.print();
                     newWin.close();
                 }
-
+                
+                  function resetValues(hoevValue) {                  
+                    if(hoevValue === null || hoevValue === '0'){
+                        var locatieElement = document.getElementById('LocatieId');
+                        var dateElement = document.getElementById('Datum');
+                        locatieElement.value = "";
+                        dateElement.value = "";
+                    }
+                }
             </script>
           
         </head>

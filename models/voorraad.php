@@ -71,7 +71,8 @@ class Voorraad {
         $db = Db::getInstance();
         $req = $db->prepare('SELECT DISTINCT vc.CategorieId, vc.Categorie '
                 . 'FROM voorraadCategorie vc '
-                . 'WHERE vc.gebruikerid = :gebruikerid');
+                . 'WHERE vc.gebruikerid = :gebruikerid '
+                . 'Order by 2');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $voorraadcatgorie) {
@@ -85,7 +86,8 @@ class Voorraad {
         $db = Db::getInstance();
         $req = $db->prepare('SELECT DISTINCT ve.EenheidId, ve.Eenheid '
                 . 'FROM voorraadEenheid ve '
-                . 'WHERE ve.gebruikerid = :gebruikerid');
+                . 'WHERE ve.gebruikerid = :gebruikerid '
+                . 'ORDER BY 2');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $voorraadeenheden) {
@@ -99,7 +101,8 @@ class Voorraad {
         $db = Db::getInstance();
         $req = $db->prepare('SELECT DISTINCT vl.LocatieId, vl.Locatie '
                 . 'FROM voorraadLocatie vl '
-                . 'WHERE vl.gebruikerid = :gebruikerid');
+                . 'WHERE vl.gebruikerid = :gebruikerid '
+                . 'Order by 2');
         $req->execute(array('gebruikerid' => $gebruikerid));
         // we create a list of Voorraad objects from the database results
         foreach ($req->fetchAll() as $voorraadlocaties) {
@@ -130,7 +133,7 @@ class Voorraad {
     public static function save($id, $gebruikerId, $product, $categorie, $hoev, $eenheid, $locatie, $datum, $isVoeding) {
         $db = Db::getInstance();
 
-        if ($datum === null) {
+        if ($datum !== null) {
             list($y, $m, $d) = explode('-', $datum);
             if (checkdate($m, $d, $y)) {
                 $time = strtotime($datum);
