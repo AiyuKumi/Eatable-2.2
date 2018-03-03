@@ -153,7 +153,7 @@ class Voorraad {
 
         // Get the id from the selected categorie
         // If a new categorie is entered (does not exist in database), add it
-        if (!is_null($categorie)) {
+        if (!is_null($categorie) && $categorie !== "") {
             $req = $db->prepare('SELECT vc.CategorieId '
                     . 'FROM voorraadCategorie vc '
                     . 'WHERE vc.gebruikerid = :gebruikerId '
@@ -174,9 +174,9 @@ class Voorraad {
                 $result = $req2->fetch();
                 $categorieId = $result['CategorieId'];
             }
-        };
+        } else $categorieId = null;
 
-        if (!is_null($eenheid)) {
+        if (!is_null($eenheid) && $eenheid !== "") {
             $req = $db->prepare('SELECT ve.EenheidId '
                     . 'FROM voorraadEenheid ve '
                     . 'WHERE ve.gebruikerid = :gebruikerId '
@@ -197,9 +197,9 @@ class Voorraad {
                 $result = $req2->fetch();
                 $eenheidId = $result['EenheidId'];
             }
-        };
+        } else $eenheidId = null;
 
-        if (!is_null($locatie)) {
+        if (!is_null($locatie) && $locatie !== "") {
             $req = $db->prepare('SELECT vl.LocatieId '
                     . 'FROM voorraadLocatie vl '
                     . 'WHERE vl.gebruikerid = :gebruikerId '
@@ -220,7 +220,7 @@ class Voorraad {
                 $result = $req2->fetch();
                 $locatieId = $result['LocatieId'];
             }
-        };
+        }else $locatieId = null;
 
         if ($id != null) { //Id is not null, so we are editing a voorraaditem
             $id = intval($id);

@@ -181,11 +181,11 @@
                 }
                 
                   function resetValues(hoevValue) {                  
-                    if(hoevValue === null || hoevValue === '0'){
+                    if(hoevValue === null || hoevValue === "0" || hoevValue === ""){
                         var locatieElement = document.getElementById('LocatieId');
                         var dateElement = document.getElementById('Datum');
-                        locatieElement.value = "";
-                        dateElement.value = "";
+                        locatieElement.value = null;
+                        dateElement.value = null;
                     }
                 }
             </script>
